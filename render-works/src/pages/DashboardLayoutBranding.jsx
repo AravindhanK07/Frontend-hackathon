@@ -127,8 +127,9 @@ function DashboardLayoutBranding(props) {
             sx={{
               width: 40,
               height: 40,
-              bgcolor: "primary.main",
-              color: "white",
+              bgcolor: "white",
+              color: "#538cf0",
+              fontWeight: "bold",
             }}
           >
             {userInitial}
@@ -182,6 +183,17 @@ function DashboardLayoutBranding(props) {
       window={demoWindow}
     >
       <DashboardLayout
+        sx={{
+          // Style for the header
+          "& .MuiAppBar-root": {
+            backgroundColor: "#538cf0", // Blue color for the header
+            color: "white", // Text color for the header
+          },
+          // Style for the sidebar
+          "& .MuiDrawer-paper": {
+            backgroundColor: "#f5f5f5", // Light gray color for the sidebar
+          },
+        }}
         slots={{
           toolbarActions: ToolbarActionsSearch,
         }}

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   TextField,
   Button,
@@ -28,7 +28,7 @@ const LoginPage = () => {
     message: "",
     severity: "info",
   });
-  //   const navigate = useNavigate();
+  const navigate = useNavigate();
 
   // Handle input changes
   const handleChange = (e) => {
@@ -84,16 +84,16 @@ const LoginPage = () => {
     try {
       // Make API call to login
       const response = await axios.post(
-        "https://api.example.com/login",
+        "http://localhost:8082/login",
         formData
       );
 
       if (response.status === 200) {
         // Save user data in session storage
-        sessionStorage.setItem("user", JSON.stringify(response.data.user));
+        sessionStorage.setItem("user", JSON.stringify(response.data));
 
         // Redirect to home page
-        // navigate("/");
+        navigate("/");
       }
     } catch (error) {
       setSnackbar({
@@ -121,12 +121,12 @@ const LoginPage = () => {
     >
       <div className="grid grid-cols-2 w-full">
         <div className="p-8">
-          {/* <h4 className="text-4xl font-bold text-white">My App</h4> */}
+          <h4 className="text-4xl font-bold text-white">My App</h4>
         </div>
 
         {/* Second div: Login form */}
         <div className="flex justify-center items-center p-8">
-          <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
+          <div className="w-full max-w-md bg-white p-6 rounded-lg shadow-lg">
             <Typography variant="h4" align="center" gutterBottom>
               Login
             </Typography>

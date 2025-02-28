@@ -8,6 +8,7 @@ import SalesTable from "./components/SalesTable.jsx";
 import PurchaseTable from "./components/PurchaseTable.jsx";
 import BalanceSheetTable from "./components/BalanceSheetTable.jsx";
 import HowToUseTable from "./components/HowToUse.jsx";
+import { MainDashboard } from "./components/MainDashboard.jsx";
 
 const App = () => {
   return (
@@ -20,7 +21,7 @@ const App = () => {
         {/* Protected Routes (Everything Else) */}
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<DashboardLayoutBranding />}>
-            <Route index element={<SalesTable />} /> {/* Default route */}
+            <Route index element={<MainDashboard />} /> {/* Default route */}
             <Route path="sales" element={<SalesTable />} />
             <Route path="purchase" element={<PurchaseTable />} />
             <Route path="balance-sheet" element={<BalanceSheetTable />} />

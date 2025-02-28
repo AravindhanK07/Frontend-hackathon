@@ -11,23 +11,27 @@ import {
   Typography,
   InputAdornment,
   IconButton,
+  Link,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import { Visibility, VisibilityOff } from "@mui/icons-material"; // Import eye icons
 import backgroundImage from "../assets/Login_page.png";
 
 const RegisterPage = () => {
+  const navigate = useNavigate();
   // State for form data
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    password: "",
     address: "",
-    phone: "",
     gender: "",
+    pinCode: "",
     dateOfBirth: "",
     city: "",
+    phone: "",
     state: "",
-    pinCode: "",
-    password: "", // Add password field
+    status: "A", // Default
   });
 
   // State for validation errors
@@ -117,10 +121,10 @@ const RegisterPage = () => {
     return isValid;
   };
 
-  const formatDate = (dateString) => {
-    const [year, month, day] = dateString.split("-");
-    return `${day}-${month}-${year}`;
-  };
+  // const formatDate = (dateString) => {
+  //   const [year, month, day] = dateString.split("-");
+  //   return `${day}-${month}-${year}`;
+  // };
 
   // Handle form submission
   const handleSubmit = async (e) => {
@@ -137,17 +141,31 @@ const RegisterPage = () => {
 
     try {
       // Make API call
-      const formattedData = {
+      // const formattedData = {
+      //   ...formData,
+      //   dateOfBirth: formatDate(formData.dateOfBirth),
+      // };
+      // console.log(formattedData);
+      // const response = await axios.post(
+      //   "http://localhost:8082/register",
+      //   formData // This should be the request body
+      // );
+
+      // Convert phone and pinCode to numbers
+      const payload = {
         ...formData,
-        dateOfBirth: formatDate(formData.dateOfBirth),
+        phone: Number(formData.phone), // Convert phone to number
+        pinCode: Number(formData.pinCode), // Convert pinCode to number
       };
-      console.log(formattedData);
+
+      // Make API call
       const response = await axios.post(
-        "https://api.example.com/register",
-        formattedData
+        "http://localhost:8082/register",
+        payload // Send the modified payload
       );
 
       if (response.status === 200) {
+        navigate("/login");
         setSnackbar({
           open: true,
           message: "Registration successful!",
@@ -189,6 +207,182 @@ const RegisterPage = () => {
     setSnackbar({ ...snackbar, open: false });
   };
 
+  // Define input fields dynamically based on formData keys
+  const inputFields = Object.keys(formData).map((field) => {
+    switch (field) {
+      case "name":
+        return (
+          <TextField
+            key={field}
+            fullWidth
+            label="Name"
+            name={field}
+            value={formData[field]}
+            onChange={handleChange}
+            error={!!errors[field]}
+            helperText={errors[field]}
+            margin="normal"
+          />
+        );
+      case "email":
+        return (
+          <TextField
+            key={field}
+            fullWidth
+            label="Email"
+            name={field}
+            value={formData[field]}
+            onChange={handleChange}
+            error={!!errors[field]}
+            helperText={errors[field]}
+            margin="normal"
+          />
+        );
+      case "password":
+        return (
+          <TextField
+            key={field}
+            fullWidth
+            label="Password"
+            name={field}
+            type={showPassword ? "text" : "password"}
+            value={formData[field]}
+            onChange={handleChange}
+            error={!!errors[field]}
+            helperText={errors[field]}
+            margin="normal"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={handleTogglePasswordVisibility}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+        );
+      case "address":
+        return (
+          <TextField
+            key={field}
+            fullWidth
+            label="Address"
+            name={field}
+            value={formData[field]}
+            onChange={handleChange}
+            error={!!errors[field]}
+            helperText={errors[field]}
+            margin="normal"
+          />
+        );
+      case "phone":
+        return (
+          <TextField
+            key={field}
+            fullWidth
+            label="Phone"
+            name={field}
+            value={formData[field]}
+            onChange={handleChange}
+            error={!!errors[field]}
+            helperText={errors[field]}
+            margin="normal"
+          />
+        );
+      case "gender":
+        return (
+          <FormControl
+            key={field}
+            fullWidth
+            margin="normal"
+            error={!!errors[field]}
+          >
+            <InputLabel id="demo-simple-select-label">Gender</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={formData[field]}
+              label="Gender"
+              name={field}
+              onChange={handleChange}
+            >
+              <MenuItem value="Male">Male</MenuItem>
+              <MenuItem value="Female">Female</MenuItem>
+            </Select>
+            {errors[field] && (
+              <Typography variant="body2" color="error">
+                {errors[field]}
+              </Typography>
+            )}
+          </FormControl>
+        );
+      case "dateOfBirth":
+        return (
+          <TextField
+            key={field}
+            fullWidth
+            label="Date of Birth"
+            name={field}
+            type="date"
+            InputLabelProps={{ shrink: true }}
+            value={formData[field]}
+            onChange={handleChange}
+            error={!!errors[field]}
+            helperText={errors[field]}
+            margin="normal"
+          />
+        );
+      case "city":
+        return (
+          <TextField
+            key={field}
+            fullWidth
+            label="City"
+            name={field}
+            value={formData[field]}
+            onChange={handleChange}
+            error={!!errors[field]}
+            helperText={errors[field]}
+            margin="normal"
+          />
+        );
+      case "state":
+        return (
+          <TextField
+            key={field}
+            fullWidth
+            label="State"
+            name={field}
+            value={formData[field]}
+            onChange={handleChange}
+            error={!!errors[field]}
+            helperText={errors[field]}
+            margin="normal"
+          />
+        );
+      case "pinCode":
+        return (
+          <TextField
+            key={field}
+            fullWidth
+            label="Pin Code"
+            name={field}
+            value={formData[field]}
+            onChange={handleChange}
+            error={!!errors[field]}
+            helperText={errors[field]}
+            margin="normal"
+          />
+        );
+      default:
+        return null;
+    }
+  });
+
   return (
     <div
       className="min-h-screen flex bg-cover bg-center"
@@ -205,149 +399,8 @@ const RegisterPage = () => {
               Register
             </Typography>
             <form onSubmit={handleSubmit}>
-              {/* Name */}
-              <TextField
-                fullWidth
-                label="Name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                error={!!errors.name}
-                helperText={errors.name}
-                margin="normal"
-              />
-
-              {/* Email */}
-              <TextField
-                fullWidth
-                label="Email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                error={!!errors.email}
-                helperText={errors.email}
-                margin="normal"
-              />
-
-              {/* Address */}
-              <TextField
-                fullWidth
-                label="Address"
-                name="address"
-                value={formData.address}
-                onChange={handleChange}
-                error={!!errors.address}
-                helperText={errors.address}
-                margin="normal"
-              />
-
-              {/* Phone */}
-              <TextField
-                fullWidth
-                label="Phone"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                error={!!errors.phone}
-                helperText={errors.phone}
-                margin="normal"
-              />
-
-              {/* Gender */}
-              <FormControl fullWidth margin="normal" error={!!errors.gender}>
-                <InputLabel id="demo-simple-select-label">Gender</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={formData.gender}
-                  label="Gender"
-                  name="gender"
-                  onChange={handleChange}
-                >
-                  <MenuItem value="male">Male</MenuItem>
-                  <MenuItem value="female">Female</MenuItem>
-                </Select>
-                {errors.gender && (
-                  <Typography variant="body2" color="error">
-                    {errors.gender}
-                  </Typography>
-                )}
-              </FormControl>
-
-              {/* Date of Birth */}
-              <TextField
-                fullWidth
-                label="Date of Birth"
-                name="dateOfBirth"
-                type="date"
-                InputLabelProps={{ shrink: true }}
-                value={formData.dateOfBirth}
-                onChange={handleChange}
-                error={!!errors.dateOfBirth}
-                helperText={errors.dateOfBirth}
-                margin="normal"
-              />
-
-              {/* City */}
-              <TextField
-                fullWidth
-                label="City"
-                name="city"
-                value={formData.city}
-                onChange={handleChange}
-                error={!!errors.city}
-                helperText={errors.city}
-                margin="normal"
-              />
-
-              {/* State */}
-              <TextField
-                fullWidth
-                label="State"
-                name="state"
-                value={formData.state}
-                onChange={handleChange}
-                error={!!errors.state}
-                helperText={errors.state}
-                margin="normal"
-              />
-
-              {/* Pin Code */}
-              <TextField
-                fullWidth
-                label="Pin Code"
-                name="pinCode"
-                value={formData.pinCode}
-                onChange={handleChange}
-                error={!!errors.pinCode}
-                helperText={errors.pinCode}
-                margin="normal"
-              />
-
-              {/* Password */}
-              <TextField
-                fullWidth
-                label="Password"
-                name="password"
-                type={showPassword ? "text" : "password"} // Toggle password visibility
-                value={formData.password}
-                onChange={handleChange}
-                error={!!errors.password}
-                helperText={errors.password}
-                margin="normal"
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={handleTogglePasswordVisibility}
-                        edge="end"
-                      >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
+              {/* Render input fields dynamically */}
+              {inputFields}
 
               {/* Submit Button */}
               <Button
@@ -360,6 +413,12 @@ const RegisterPage = () => {
               >
                 Register
               </Button>
+              <Typography variant="body2" align="center" sx={{ mt: 2 }}>
+                Go to login?{" "}
+                <Link href="/login" underline="hover">
+                  Login
+                </Link>
+              </Typography>
             </form>
           </div>
         </div>
