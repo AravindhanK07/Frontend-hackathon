@@ -9,14 +9,21 @@ import {
   Paper,
   Typography,
   Box,
+  styled, // Import the styled utility
 } from "@mui/material";
+
+// Define styled components for the table header cells
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  color: "red", // Font color
+  fontWeight: "bold", // Bold text
+  textAlign: "center",
+  fontFamily: "sans-serif", // Center align text
+}));
 
 const SalesTable = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    // Fetch data from API
-    console.log("ST");
     const fetchData = async () => {
       try {
         const response = await fetch("https://api.example.com/sales");
@@ -39,14 +46,14 @@ const SalesTable = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell align="center">Invoice No</TableCell>
-              <TableCell align="center">Customer ID</TableCell>
-              <TableCell align="center">Amount</TableCell>
-              <TableCell align="center">Tax</TableCell>
-              <TableCell align="center">Total Amount</TableCell>
-              <TableCell align="center">Status</TableCell>
-              <TableCell align="center">Revenue</TableCell>
-              <TableCell align="center">Sold Date</TableCell>
+              <StyledTableCell>Invoice No</StyledTableCell>
+              <StyledTableCell>Customer ID</StyledTableCell>
+              <StyledTableCell>Amount</StyledTableCell>
+              <StyledTableCell>Tax</StyledTableCell>
+              <StyledTableCell>Total Amount</StyledTableCell>
+              <StyledTableCell>Status</StyledTableCell>
+              <StyledTableCell>Revenue</StyledTableCell>
+              <StyledTableCell>Sold Date</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>

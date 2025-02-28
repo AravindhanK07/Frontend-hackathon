@@ -9,13 +9,20 @@ import {
   Paper,
   Typography,
   Box,
+  styled,
 } from "@mui/material";
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  color: "red",
+  fontWeight: "bold",
+  textAlign: "center",
+  fontFamily: "sans-serif",
+}));
 
 const PurchaseTable = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    // Fetch data from API
     const fetchData = async () => {
       try {
         const response = await fetch("https://api.example.com/purchase");
@@ -38,15 +45,15 @@ const PurchaseTable = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell align="center">Purchase ID</TableCell>
-              <TableCell align="center">Vendor ID</TableCell>
-              <TableCell align="center">Invoice No</TableCell>
-              <TableCell align="center">Purchase Date</TableCell>
-              <TableCell align="center">Amount</TableCell>
-              <TableCell align="center">Tax</TableCell>
-              <TableCell align="center">Total Amount</TableCell>
-              <TableCell align="center">Payment Methord</TableCell>
-              <TableCell align="center">Status</TableCell>
+              <StyledTableCell>Purchase ID</StyledTableCell>
+              <StyledTableCell>Vendor ID</StyledTableCell>
+              <StyledTableCell>Invoice No</StyledTableCell>
+              <StyledTableCell>Purchase Date</StyledTableCell>
+              <StyledTableCell>Amount</StyledTableCell>
+              <StyledTableCell>Tax</StyledTableCell>
+              <StyledTableCell>Total Amount</StyledTableCell>
+              <StyledTableCell>Payment Method</StyledTableCell>
+              <StyledTableCell>Status</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
