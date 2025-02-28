@@ -3,11 +3,11 @@ import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { createTheme } from "@mui/material/styles";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { AppProvider } from "@toolpad/core/AppProvider";
 import { DashboardLayout } from "@toolpad/core/DashboardLayout";
 import { useDemoRouter } from "@toolpad/core/internal";
+import "../style.css";
+
 import {
   Table,
   TableBody,
@@ -16,29 +16,36 @@ import {
   TableHead,
   TableRow,
   Paper,
+  colors,
 } from "@mui/material";
+
+// Icons for the sidebar
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney"; // $ icon for Sales
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart"; // Icon for Purchase
+import AccountBalanceIcon from "@mui/icons-material/AccountBalance"; // Icon for Balance Sheet
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline"; // Icon for How to Use
 
 // Navigation items for the sidebar
 const NAVIGATION = [
   {
     segment: "sales",
     title: "Sales",
-    icon: <DashboardIcon />,
+    icon: <AttachMoneyIcon />, // $ icon for Sales
   },
   {
     segment: "purchase",
     title: "Purchase",
-    icon: <ShoppingCartIcon />,
+    icon: <ShoppingCartIcon />, // Shopping cart icon for Purchase
   },
   {
     segment: "balance-sheet",
     title: "Balance Sheet",
-    icon: <ShoppingCartIcon />,
+    icon: <AccountBalanceIcon />, // Account balance icon for Balance Sheet
   },
   {
     segment: "how-to-use",
     title: "How to Use",
-    icon: <ShoppingCartIcon />,
+    icon: <HelpOutlineIcon />, // Help outline icon for How to Use
   },
 ];
 
@@ -127,9 +134,9 @@ function DemoPageContent({ pathname }) {
     case "/sales":
       data = sampleData.sales;
       columns = [
-        { field: "product", headerName: "Product" },
-        { field: "quantity", headerName: "Quantity" },
-        { field: "revenue", headerName: "Revenue" },
+        { field: "product", headerName: "Product", colors: "red" },
+        { field: "quantity", headerName: "Quantity", colors: "red" },
+        { field: "revenue", headerName: "Revenue", colors: "red" },
       ];
       break;
     case "/purchase":
@@ -167,8 +174,7 @@ function DemoPageContent({ pathname }) {
         flexDirection: "column",
         alignItems: "center",
         textAlign: "center",
-      }}
-    >
+      }}>
       <Typography variant="h4" gutterBottom>
         {NAVIGATION.find((nav) => nav.segment === pathname.slice(1))?.title}
       </Typography>
@@ -200,8 +206,7 @@ function DashboardLayoutBranding(props) {
       }}
       router={router}
       theme={demoTheme}
-      window={demoWindow}
-    >
+      window={demoWindow}>
       <DashboardLayout>
         <DemoPageContent pathname={router.pathname} />
       </DashboardLayout>
@@ -210,14 +215,9 @@ function DashboardLayoutBranding(props) {
 }
 
 DashboardLayoutBranding.propTypes = {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * Remove this when copying and pasting into your project.
-   */
   window: PropTypes.func,
 };
 
-// HomePage component with the dashboard layout
 const HomePage = () => {
   return <DashboardLayoutBranding />;
 };
