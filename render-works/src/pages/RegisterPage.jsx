@@ -9,7 +9,10 @@ import {
   Select,
   Snackbar,
   Typography,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material"; // Import eye icons
 import backgroundImage from "../assets/Login_page.png";
 
 const RegisterPage = () => {
@@ -24,6 +27,7 @@ const RegisterPage = () => {
     city: "",
     state: "",
     pinCode: "",
+    password: "", // Add password field
   });
 
   // State for validation errors
@@ -35,6 +39,14 @@ const RegisterPage = () => {
     message: "",
     severity: "info",
   });
+
+  // State for password visibility
+  const [showPassword, setShowPassword] = useState(false);
+
+  // Toggle password visibility
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
 
   // Handle input changes
   const handleChange = (e) => {
@@ -77,6 +89,11 @@ const RegisterPage = () => {
         break;
       case "pinCode":
         if (!/^\d{6}$/.test(value)) errorMessage = "Pin Code must be 6 digits.";
+        break;
+      case "password": // Add validation for password
+        if (!value.trim()) errorMessage = "Password is required.";
+        else if (value.length < 8)
+          errorMessage = "Password must be at least 8 characters.";
         break;
       default:
         break;
@@ -147,6 +164,7 @@ const RegisterPage = () => {
           city: "",
           state: "",
           pinCode: "",
+          password: "", // Reset password field
         });
       }
     } catch (error) {
@@ -235,6 +253,7 @@ const RegisterPage = () => {
                 margin="normal"
               />
 
+              {/* Gender */}
               <FormControl fullWidth margin="normal" error={!!errors.gender}>
                 <InputLabel id="demo-simple-select-label">Gender</InputLabel>
                 <Select
@@ -254,24 +273,6 @@ const RegisterPage = () => {
                   </Typography>
                 )}
               </FormControl>
-
-              {/* <FormControl fullWidth margin="normal" error={!!errors.gender}>
-                <InputLabel shrink={!!formData.gender}>Gender</InputLabel>
-                <Select
-                  name="gender"
-                  value={formData.gender}
-                  onChange={handleChange}
-                  label="Gender"
-                >
-                  <MenuItem value="male">Male</MenuItem>
-                  <MenuItem value="female">Female</MenuItem>
-                </Select>
-                {errors.gender && (
-                  <Typography variant="body2" color="error">
-                    {errors.gender}
-                  </Typography>
-                )}
-              </FormControl> */}
 
               {/* Date of Birth */}
               <TextField
@@ -321,6 +322,31 @@ const RegisterPage = () => {
                 error={!!errors.pinCode}
                 helperText={errors.pinCode}
                 margin="normal"
+              />
+
+              {/* Password */}
+              <TextField
+                fullWidth
+                label="Password"
+                name="password"
+                type={showPassword ? "text" : "password"} // Toggle password visibility
+                value={formData.password}
+                onChange={handleChange}
+                error={!!errors.password}
+                helperText={errors.password}
+                margin="normal"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={handleTogglePasswordVisibility}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
 
               {/* Submit Button */}
