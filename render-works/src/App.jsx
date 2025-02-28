@@ -1,29 +1,35 @@
-// App.js
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  BrowserRouter,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import RegisterPage from "./pages/RegisterPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
-import HomePage from "./pages/HomePage.jsx";
 import ProtectedRoute from "./routes/ProtectedRoute.jsx";
+import DashboardLayoutBranding from "./pages/DashboardLayoutBranding.jsx";
+import SalesTable from "./components/SalesTable.jsx";
+import PurchaseTable from "./components/PurchaseTable.jsx";
+import BalanceSheetTable from "./components/BalanceSheetTable.jsx";
+import HowToUseTable from "./components/HowToUse.jsx";
 
-export default function App() {
+const App = () => {
   return (
-    <BrowserRouter>
+    <Router>
       <Routes>
         {/* Public Routes */}
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
 
-        {/* Protected Routes */}
+        {/* Protected Routes (Everything Else) */}
         <Route element={<ProtectedRoute />}>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<DashboardLayoutBranding />}>
+            <Route index element={<SalesTable />} /> {/* Default route */}
+            <Route path="sales" element={<SalesTable />} />
+            <Route path="purchase" element={<PurchaseTable />} />
+            <Route path="balance-sheet" element={<BalanceSheetTable />} />
+            <Route path="how-to-use" element={<HowToUseTable />} />
+          </Route>
         </Route>
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
-}
+};
+
+export default App;
