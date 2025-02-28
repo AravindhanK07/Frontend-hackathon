@@ -39,9 +39,14 @@ const SalesTable = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell align="center">Product</TableCell>
-              <TableCell align="center">Quantity</TableCell>
+              <TableCell align="center">Invoice No</TableCell>
+              <TableCell align="center">Customer ID</TableCell>
+              <TableCell align="center">Amount</TableCell>
+              <TableCell align="center">Tax</TableCell>
+              <TableCell align="center">Total Amount</TableCell>
+              <TableCell align="center">Status</TableCell>
               <TableCell align="center">Revenue</TableCell>
+              <TableCell align="center">Sold Date</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

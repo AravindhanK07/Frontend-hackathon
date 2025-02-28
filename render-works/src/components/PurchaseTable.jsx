@@ -38,9 +38,15 @@ const PurchaseTable = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell align="center">Product</TableCell>
-              <TableCell align="center">Quantity</TableCell>
-              <TableCell align="center">Cost</TableCell>
+              <TableCell align="center">Purchase ID</TableCell>
+              <TableCell align="center">Vendor ID</TableCell>
+              <TableCell align="center">Invoice No</TableCell>
+              <TableCell align="center">Purchase Date</TableCell>
+              <TableCell align="center">Amount</TableCell>
+              <TableCell align="center">Tax</TableCell>
+              <TableCell align="center">Total Amount</TableCell>
+              <TableCell align="center">Payment Methord</TableCell>
+              <TableCell align="center">Status</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
