@@ -1,4 +1,3 @@
-// src/components/SalesTable.js
 import React, { useEffect, useState } from "react";
 import {
   Table,
@@ -12,9 +11,11 @@ import {
   Box,
   styled,
   Button,
+  Alert,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import FormModal from "./Modals/SalesModel";
+import SalesModel from "../Modals/SalesModel";
+import { IconButton } from "@mui/material";
 
 const StyledTableCell = styled(TableCell)({
   color: "red",
@@ -27,13 +28,16 @@ const SalesTable = () => {
   const [data, setData] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [formData, setFormData] = useState({
-    region_name: "",
-    cluster_name: "",
-    name: "",
-    code: "",
-    remarks: "",
-    total_no_of_distributor: "",
+    customer_name: "",
+    invoice_number: "",
+    invoice_date: "",
+    net_amount: "",
+    tax: "",
+    total_amount: "",
+    payment_method: "",
+    payment_status: "",
   });
+  const [alertMessage, setAlertMessage] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,13 +55,16 @@ const SalesTable = () => {
 
   const handleAddNewEntry = () => {
     setFormData({
-      region_name: "",
-      cluster_name: "",
-      name: "",
-      code: "",
-      remarks: "",
-      total_no_of_distributor: "",
+      customer_name: "",
+      invoice_number: "",
+      invoice_date: "",
+      net_amount: "",
+      tax: "",
+      total_amount: "",
+      payment_method: "",
+      payment_status: "",
     });
+    setAlertMessage("");
     setModalOpen(true);
   };
 
@@ -67,6 +74,20 @@ const SalesTable = () => {
   };
 
   const handleSave = () => {
+    if (
+      !formData.customer_name ||
+      !formData.invoice_number ||
+      !formData.invoice_date ||
+      !formData.net_amount ||
+      !formData.tax ||
+      !formData.total_amount ||
+      !formData.payment_method ||
+      !formData.payment_status
+    ) {
+      setAlertMessage("All fields are required!");
+      return;
+    }
+
     setData([...data, { ...formData, id: data.length + 1 }]);
     setModalOpen(false);
   };
@@ -76,14 +97,24 @@ const SalesTable = () => {
       <Typography variant="h4" gutterBottom>
         Sales
       </Typography>
+      {alertMessage && <Alert severity="error">{alertMessage}</Alert>}
       <Box display="flex" justifyContent="flex-end" mb={2}>
-        <Button
-          variant="contained"
+        <IconButton
           color="primary"
-          startIcon={<AddIcon />}
-          onClick={handleAddNewEntry}>
-          Create
-        </Button>
+          onClick={handleAddNewEntry}
+          sx={{
+            backgroundColor: "#1976d2",
+            color: "#fff",
+            width: 48,
+            height: 48,
+            paddingLeft: "10px",
+            padding: "10px",
+            "&:hover": {
+              backgroundColor: "#1565c0",
+            },
+          }}>
+          <AddIcon />
+        </IconButton>
       </Box>
       <TableContainer component={Paper}>
         <Table>
@@ -116,7 +147,7 @@ const SalesTable = () => {
         </Table>
       </TableContainer>
 
-      <FormModal
+      <SalesModel
         open={modalOpen}
         handleClose={() => setModalOpen(false)}
         formData={formData}
