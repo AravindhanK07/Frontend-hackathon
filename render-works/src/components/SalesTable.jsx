@@ -21,7 +21,7 @@ const StyledTableCell = styled(TableCell)({
   color: "red",
   fontWeight: "bold",
   textAlign: "center",
-  fontFamily: "sans-serif",
+  fontFamily: "Roboto",
 });
 
 const SalesTable = () => {
@@ -94,9 +94,6 @@ const SalesTable = () => {
 
   return (
     <Box>
-      {/* <Typography variant="h4" gutterBottom>
-        Sales
-      </Typography> */}
       {alertMessage && <Alert severity="error">{alertMessage}</Alert>}
       <Box display="flex" justifyContent="flex-end" mb={2}>
         <IconButton
@@ -109,6 +106,8 @@ const SalesTable = () => {
             height: 48,
             paddingLeft: "10px",
             padding: "10px",
+            marginRight: "10px",
+            marginTop: "10px",
             "&:hover": {
               backgroundColor: "#1565c0",
             },
