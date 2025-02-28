@@ -94,9 +94,9 @@ const SalesTable = () => {
 
   return (
     <Box>
-      <Typography variant="h4" gutterBottom>
+      {/* <Typography variant="h4" gutterBottom>
         Sales
-      </Typography>
+      </Typography> */}
       {alertMessage && <Alert severity="error">{alertMessage}</Alert>}
       <Box display="flex" justifyContent="flex-end" mb={2}>
         <IconButton
