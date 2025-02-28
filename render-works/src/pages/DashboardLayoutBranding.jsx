@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import { createTheme } from "@mui/material/styles";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import BalanceIcon from "@mui/icons-material/AccountBalance";
+import HelpIcon from "@mui/icons-material/HelpOutline";
 import { AppProvider } from "@toolpad/core/AppProvider";
 import { DashboardLayout } from "@toolpad/core/DashboardLayout";
 import { Link, Outlet, useNavigate } from "react-router-dom";
@@ -11,7 +13,6 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Avatar from "@mui/material/Avatar";
 
-// Navigation items for the sidebar
 const NAVIGATION = [
   {
     segment: "sales",
@@ -28,18 +29,17 @@ const NAVIGATION = [
   {
     segment: "balance-sheet",
     title: "Balance Sheet",
-    icon: <ShoppingCartIcon />,
+    icon: <BalanceIcon />,
     path: "/balance-sheet",
   },
   {
     segment: "how-to-use",
     title: "How to Use",
-    icon: <ShoppingCartIcon />,
+    icon: <HelpIcon />,
     path: "/how-to-use",
   },
 ];
 
-// Demo theme for the dashboard
 const demoTheme = createTheme({
   cssVariables: {
     colorSchemeSelector: "data-toolpad-color-scheme",
@@ -56,12 +56,10 @@ const demoTheme = createTheme({
   },
 });
 
-// Dashboard layout with custom branding
 function DashboardLayoutBranding(props) {
   const { window } = props;
   const navigate = useNavigate();
 
-  // Remove this const when copying and pasting into your project.
   const demoWindow = window !== undefined ? window() : undefined;
 
   function ToolbarActionsSearch() {
@@ -172,7 +170,6 @@ function DashboardLayoutBranding(props) {
       // authentication={authentication}
       navigation={NAVIGATION.map((nav) => ({
         ...nav,
-        // Use Link to handle navigation
         icon: <Link to={nav.path}>{nav.icon}</Link>,
         title: <Link to={nav.path}>{nav.title}</Link>,
       }))}
@@ -196,10 +193,6 @@ function DashboardLayoutBranding(props) {
 }
 
 DashboardLayoutBranding.propTypes = {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * Remove this when copying and pasting into your project.
-   */
   window: PropTypes.func,
 };
 

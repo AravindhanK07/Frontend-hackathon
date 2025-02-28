@@ -9,13 +9,20 @@ import {
   Paper,
   Typography,
   Box,
+  styled,
 } from "@mui/material";
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  color: "red",
+  fontWeight: "bold",
+  textAlign: "center",
+  fontFamily: "sans-serif",
+}));
 
 const PurchaseTable = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    // Fetch data from API
     const fetchData = async () => {
       try {
         const response = await fetch("https://api.example.com/purchase");
@@ -38,17 +45,29 @@ const PurchaseTable = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell align="center">Product</TableCell>
-              <TableCell align="center">Quantity</TableCell>
-              <TableCell align="center">Cost</TableCell>
+              <StyledTableCell>Purchase ID</StyledTableCell>
+              <StyledTableCell>Vendor ID</StyledTableCell>
+              <StyledTableCell>Invoice No</StyledTableCell>
+              <StyledTableCell>Purchase Date</StyledTableCell>
+              <StyledTableCell>Amount</StyledTableCell>
+              <StyledTableCell>Tax</StyledTableCell>
+              <StyledTableCell>Total Amount</StyledTableCell>
+              <StyledTableCell>Payment Method</StyledTableCell>
+              <StyledTableCell>Status</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {data.map((row) => (
               <TableRow key={row.id}>
-                <TableCell align="center">{row.product}</TableCell>
-                <TableCell align="center">{row.quantity}</TableCell>
-                <TableCell align="center">{row.cost}</TableCell>
+                <TableCell align="center">{row.purchase_id}</TableCell>
+                <TableCell align="center">{row.vendor_id}</TableCell>
+                <TableCell align="center">{row.invoice_no}</TableCell>
+                <TableCell align="center">{row.purchase_date}</TableCell>
+                <TableCell align="center">{row.amount}</TableCell>
+                <TableCell align="center">{row.tax}</TableCell>
+                <TableCell align="center">{row.total_amount}</TableCell>
+                <TableCell align="center">{row.payment_methord}</TableCell>
+                <TableCell align="center">{row.status}</TableCell>
               </TableRow>
             ))}
           </TableBody>
