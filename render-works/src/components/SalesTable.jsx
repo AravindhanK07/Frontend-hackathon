@@ -28,25 +28,32 @@ const SalesTable = () => {
   const [data, setData] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [formData, setFormData] = useState({
-    customer_name: "",
-    invoice_number: "",
-    invoice_date: "",
+    customer_id: "",
+    invoice_no: "",
+    order_date: "",
     net_amount: "",
-    tax: "",
+    amount: "",
     total_amount: "",
     payment_method: "",
-    payment_status: "",
+    status: "",
   });
   const [alertMessage, setAlertMessage] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("https://api.example.com/sales");
+        const response = await fetch("http://localhost:8082/api/GetAllSales");
         const result = await response.json();
-        setData(result);
+
+        if (Array.isArray(result)) {
+          setData(result);
+        } else {
+          console.error("Unexpected API response:", result);
+          setData([]); // Set an empty array to avoid map() errors
+        }
       } catch (error) {
         console.error("Error fetching sales data:", error);
+        setData([]); // Ensure data is always an array
       }
     };
 
@@ -119,29 +126,35 @@ const SalesTable = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <StyledTableCell>Customer Name</StyledTableCell>
+              <StyledTableCell>Customer ID</StyledTableCell>
               <StyledTableCell>Invoice Number</StyledTableCell>
-              <StyledTableCell>Invoice Date</StyledTableCell>
+              <StyledTableCell>Order Date</StyledTableCell>
               <StyledTableCell>Net Amount</StyledTableCell>
-              <StyledTableCell>Tax</StyledTableCell>
+              <StyledTableCell>Amount</StyledTableCell>
               <StyledTableCell>Total Amount</StyledTableCell>
-              <StyledTableCell>Payment Method</StyledTableCell>
               <StyledTableCell>Payment Status</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((row) => (
-              <TableRow key={row.id}>
-                <TableCell align="center">{row.customer_name}</TableCell>
-                <TableCell align="center">{row.invoice_number}</TableCell>
-                <TableCell align="center">{row.invoice_date}</TableCell>
-                <TableCell align="center">{row.net_amount}</TableCell>
-                <TableCell align="center">{row.tax}</TableCell>
-                <TableCell align="center">{row.total_amount}</TableCell>
-                <TableCell align="center">{row.payment_method}</TableCell>
-                <TableCell align="center">{row.payment_status}</TableCell>
+            {Array.isArray(data) && data.length > 0 ? (
+              data.map((row) => (
+                <TableRow key={row.id}>
+                  <TableCell align="center">{row.customer_id}</TableCell>
+                  <TableCell align="center">{row.invoice_no}</TableCell>
+                  <TableCell align="center">{row.order_date}</TableCell>
+                  <TableCell align="center">{row.net_amount}</TableCell>
+                  <TableCell align="center">{row.amount}</TableCell>
+                  <TableCell align="center">{row.total_amount}</TableCell>
+                  <TableCell align="center">{row.status}</TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={7} align="center">
+                  No sales data available.
+                </TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </TableContainer>
