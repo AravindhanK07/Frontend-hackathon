@@ -52,9 +52,14 @@ const SalesTable = () => {
           <TableBody>
             {data.map((row) => (
               <TableRow key={row.id}>
-                <TableCell align="center">{row.product}</TableCell>
-                <TableCell align="center">{row.quantity}</TableCell>
+                <TableCell align="center">{row.invoice_no}</TableCell>
+                <TableCell align="center">{row.customer_id}</TableCell>
+                <TableCell align="center">{row.amount}</TableCell>
+                <TableCell align="center">{row.tax}</TableCell>
+                <TableCell align="center">{row.total_amount}</TableCell>
+                <TableCell align="center">{row.status}</TableCell>
                 <TableCell align="center">{row.revenue}</TableCell>
+                <TableCell align="center">{row.sold_date}</TableCell>
               </TableRow>
             ))}
           </TableBody>
