@@ -91,16 +91,13 @@ function DashboardLayoutBranding(props) {
     const handleLogout = async () => {
       navigate("/login");
       try {
-        // Make API call to logout
         const response = await fetch("https://api.example.com/logout", {
           method: "POST",
-          credentials: "include", // Include cookies if needed
+          credentials: "include",
         });
 
         if (response.ok) {
-          // Clear session
           setSession(null);
-          // Redirect to login page
           navigate("/login");
         } else {
           console.error("Logout failed");

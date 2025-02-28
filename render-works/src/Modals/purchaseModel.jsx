@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import { Box } from "@mui/material";
-import "../style.css";
-
 import {
+  Box,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -11,8 +9,9 @@ import {
   Button,
   Alert,
 } from "@mui/material";
+import "../style.css";
 
-const SalesModel = ({
+const PurchaseModel = ({
   open,
   handleClose,
   formData,
@@ -31,26 +30,32 @@ const SalesModel = ({
   const validateFields = () => {
     let newErrors = {};
 
-    if (!formData.customer_name.trim())
-      newErrors.customer_name = "Customer Name is required";
-    if (!formData.invoice_number.trim())
-      newErrors.invoice_number = "Invoice Number is required";
-    if (!formData.invoice_date.trim())
-      newErrors.invoice_date = "Invoice Date is required";
-    if (!formData.net_amount.trim() || isNaN(formData.net_amount))
+    if (!formData.vendor_name?.trim())
+      newErrors.vendor_name = "Vendor Name is required";
+    if (!formData.purchase_number?.trim())
+      newErrors.purchase_number = "Invoice Number is required";
+    if (!formData.purchase_date?.trim())
+      newErrors.purchase_date = "Invoice Date is required";
+    if (!formData.net_amount?.trim() || isNaN(formData.net_amount))
       newErrors.net_amount = "Enter a valid Net Amount";
-    if (!formData.tax.trim() || isNaN(formData.tax))
+    if (!formData.tax?.trim() || isNaN(formData.tax))
       newErrors.tax = "Enter a valid Tax Amount";
-    if (!formData.total_amount.trim() || isNaN(formData.total_amount))
+    if (!formData.total_amount?.trim() || isNaN(formData.total_amount))
       newErrors.total_amount = "Enter a valid Total Amount";
-    if (!formData.payment_method.trim())
+    if (!formData.payment_method?.trim())
       newErrors.payment_method = "Payment Method is required";
-    if (!formData.payment_status.trim())
+    if (!formData.payment_status?.trim())
       newErrors.payment_status = "Payment Status is required";
 
     setErrors(newErrors);
-    setAlertMessage();
-    return Object.keys(newErrors).length === 0;
+
+    if (Object.keys(newErrors).length > 0) {
+      //   setAlertMessage("Please fill all required fields correctly.");
+      return false;
+    } else {
+      setAlertMessage("");
+      return true;
+    }
   };
 
   const handleSubmit = () => {
@@ -63,30 +68,22 @@ const SalesModel = ({
     <Dialog open={open} onClose={handleCloseDialog} fullWidth maxWidth="sm">
       <DialogTitle
         sx={{
-          textAlign: "center",
+          textAlign: formData.id ? "center" : "left",
           fontFamily: "sans-serif",
           fontWeight: "bold",
-          color: "#1976d2",
+          color: "#fff",
+          backgroundColor: formData.id ? "transparent" : "#1976d2",
+          padding: "12px",
+          pl: 3,
         }}>
-        <DialogTitle
-          sx={{
-            textAlign: formData.id ? "center" : "left", // Align left for "Add Sales"
-            fontFamily: "sans-serif",
-            fontWeight: "bold",
-            color: "#fff",
-            backgroundColor: formData.id ? "transparent" : "#1976d2", // Blue only for "Add Sales"
-            padding: "12px",
-            pl: 3, // Add left padding for better spacing
-          }}>
-          {formData.id ? "Edit Entry" : "Add Sales"}
-        </DialogTitle>
+        {formData.id ? "Edit Entry" : "Add Purchase"}
       </DialogTitle>
       <DialogContent>
         {alertMessage && <Alert severity="error">{alertMessage}</Alert>}
         {[
-          { label: "Customer Name", name: "customer_name" },
-          { label: "Invoice Number", name: "invoice_number" },
-          { label: "Invoice Date", name: "invoice_date", type: "date" },
+          { label: "Vendor Name", name: "vendor_name" },
+          { label: "Purchase Number", name: "purchase_number" },
+          { label: "Purchase Date", name: "purchase_date", type: "date" },
           { label: "Net Amount", name: "net_amount" },
           { label: "Tax", name: "tax" },
           { label: "Total Amount", name: "total_amount" },
@@ -100,7 +97,7 @@ const SalesModel = ({
             fullWidth
             margin="normal"
             type={type}
-            value={formData[name]}
+            value={formData[name] || ""}
             onChange={handleInputChange}
             error={!!errors[name]}
             helperText={errors[name]}
@@ -119,4 +116,4 @@ const SalesModel = ({
   );
 };
 
-export default SalesModel;
+export default PurchaseModel;
