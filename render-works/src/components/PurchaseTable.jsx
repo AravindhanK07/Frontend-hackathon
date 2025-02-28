@@ -38,26 +38,23 @@ const PurchaseTable = () => {
   });
   const [alertMessage, setAlertMessage] = useState("");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          "http://localhost:8082/api/GetAllPurchases"
-        );
-        const result = await response.json();
-
-        if (result.length === 0) {
-          setError("No sales data found.");
-        } else {
-          setData(result);
-          // setError("");
-        }
-      } catch (error) {
-        console.error("Error fetching sales data:", error);
-        setError("Failed to fetch sales data. Please try again later.");
+  const fetchData = async () => {
+    try {
+      const response = await fetch("http://localhost:8082/api/GetAllPurchases");
+      const result = await response.json();
+      if (result) {
+        setData(result.data);
+      } else {
+        console.error("Unexpected API response:", result);
+        setData([]);
       }
-    };
+    } catch (error) {
+      console.error("Error fetching sales data:", error);
+      setData([]);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
   }, []);
 
