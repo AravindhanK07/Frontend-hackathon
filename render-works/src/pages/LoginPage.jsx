@@ -117,7 +117,8 @@ const LoginPage = () => {
   return (
     <div
       className="min-h-screen flex bg-cover bg-center"
-      style={{ backgroundImage: `url(${backgroundImage})` }}>
+      style={{ backgroundImage: `url(${backgroundImage})` }}
+    >
       <div className="grid grid-cols-2 w-full">
         <div className="p-8">
           {/* <h4 className="text-4xl font-bold text-white">My App</h4> */}
@@ -162,7 +163,8 @@ const LoginPage = () => {
                     <InputAdornment position="end">
                       <IconButton
                         onClick={handleTogglePasswordVisibility}
-                        edge="end">
+                        edge="end"
+                      >
                         {showPassword ? <VisibilityOff /> : <Visibility />}
                       </IconButton>
                     </InputAdornment>
@@ -177,7 +179,8 @@ const LoginPage = () => {
                 variant="contained"
                 color="primary"
                 disabled={!validateForm()}
-                sx={{ mt: 3 }}>
+                sx={{ mt: 3 }}
+              >
                 Login
               </Button>
 
