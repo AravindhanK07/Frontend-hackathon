@@ -19,37 +19,34 @@ import {
   colors,
 } from "@mui/material";
 
-// Icons for the sidebar
-import AttachMoneyIcon from "@mui/icons-material/AttachMoney"; // $ icon for Sales
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart"; // Icon for Purchase
-import AccountBalanceIcon from "@mui/icons-material/AccountBalance"; // Icon for Balance Sheet
-import HelpOutlineIcon from "@mui/icons-material/HelpOutline"; // Icon for How to Use
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 
-// Navigation items for the sidebar
 const NAVIGATION = [
   {
     segment: "sales",
     title: "Sales",
-    icon: <AttachMoneyIcon />, // $ icon for Sales
+    icon: <AttachMoneyIcon />,
   },
   {
     segment: "purchase",
     title: "Purchase",
-    icon: <ShoppingCartIcon />, // Shopping cart icon for Purchase
+    icon: <ShoppingCartIcon />,
   },
   {
     segment: "balance-sheet",
     title: "Balance Sheet",
-    icon: <AccountBalanceIcon />, // Account balance icon for Balance Sheet
+    icon: <AccountBalanceIcon />,
   },
   {
     segment: "how-to-use",
     title: "How to Use",
-    icon: <HelpOutlineIcon />, // Help outline icon for How to Use
+    icon: <HelpOutlineIcon />,
   },
 ];
 
-// Demo theme for the dashboard
 const demoTheme = createTheme({
   cssVariables: {
     colorSchemeSelector: "data-toolpad-color-scheme",

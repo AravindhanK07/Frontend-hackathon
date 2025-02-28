@@ -45,29 +45,27 @@ const PurchaseTable = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <StyledTableCell>Purchase ID</StyledTableCell>
-              <StyledTableCell>Vendor ID</StyledTableCell>
-              <StyledTableCell>Invoice No</StyledTableCell>
+              <StyledTableCell>Vendor Name</StyledTableCell>
+              <StyledTableCell>Purchase Number</StyledTableCell>
               <StyledTableCell>Purchase Date</StyledTableCell>
-              <StyledTableCell>Amount</StyledTableCell>
+              <StyledTableCell>Net Amount</StyledTableCell>
               <StyledTableCell>Tax</StyledTableCell>
               <StyledTableCell>Total Amount</StyledTableCell>
               <StyledTableCell>Payment Method</StyledTableCell>
-              <StyledTableCell>Status</StyledTableCell>
+              <StyledTableCell>Payment Status</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {data.map((row) => (
               <TableRow key={row.id}>
-                <TableCell align="center">{row.purchase_id}</TableCell>
-                <TableCell align="center">{row.vendor_id}</TableCell>
-                <TableCell align="center">{row.invoice_no}</TableCell>
+                <TableCell align="center">{row.vendor_name}</TableCell>
+                <TableCell align="center">{row.purchase_number}</TableCell>
                 <TableCell align="center">{row.purchase_date}</TableCell>
-                <TableCell align="center">{row.amount}</TableCell>
+                <TableCell align="center">{row.net_amount}</TableCell>
                 <TableCell align="center">{row.tax}</TableCell>
                 <TableCell align="center">{row.total_amount}</TableCell>
                 <TableCell align="center">{row.payment_methord}</TableCell>
-                <TableCell align="center">{row.status}</TableCell>
+                <TableCell align="center">{row.payment_status}</TableCell>
               </TableRow>
             ))}
           </TableBody>

@@ -91,16 +91,13 @@ function DashboardLayoutBranding(props) {
     const handleLogout = async () => {
       navigate("/login");
       try {
-        // Make API call to logout
         const response = await fetch("https://api.example.com/logout", {
           method: "POST",
-          credentials: "include", // Include cookies if needed
+          credentials: "include", 
         });
 
         if (response.ok) {
-          // Clear session
           setSession(null);
-          // Redirect to login page
           navigate("/login");
         } else {
           console.error("Logout failed");
@@ -120,8 +117,7 @@ function DashboardLayoutBranding(props) {
           aria-controls="account-menu"
           aria-haspopup="true"
           onClick={handleMenuOpen}
-          sx={{ p: 0 }}
-        >
+          sx={{ p: 0 }}>
           <Avatar
             alt={session?.user?.name}
             sx={{
@@ -129,8 +125,7 @@ function DashboardLayoutBranding(props) {
               height: 40,
               bgcolor: "primary.main",
               color: "white",
-            }}
-          >
+            }}>
             {userInitial}
           </Avatar>
         </IconButton>
@@ -154,8 +149,7 @@ function DashboardLayoutBranding(props) {
               mt: 1.5, // Margin from the avatar
               minWidth: 180, // Set a proper width
             },
-          }}
-        >
+          }}>
           <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
           <MenuItem onClick={handleMenuClose}>Settings</MenuItem>
           <MenuItem onClick={handleLogout}>Logout</MenuItem>
@@ -179,13 +173,11 @@ function DashboardLayoutBranding(props) {
         homeUrl: "/",
       }}
       theme={demoTheme}
-      window={demoWindow}
-    >
+      window={demoWindow}>
       <DashboardLayout
         slots={{
           toolbarActions: ToolbarActionsSearch,
-        }}
-      >
+        }}>
         <Outlet /> {/* Render nested routes here */}
       </DashboardLayout>
     </AppProvider>
