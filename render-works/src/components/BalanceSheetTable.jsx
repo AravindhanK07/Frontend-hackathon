@@ -41,7 +41,7 @@ const BalanceSheetTable = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8082/api/account_data"
+        "http://localhost:8080/api/account_data"
       );
       console.log(response.data);
 
@@ -99,7 +99,7 @@ const BalanceSheetTable = () => {
       // Simulate API call to add new expense
       const jwt_code = sessionStorage.getItem("user");
       const response = await fetch(
-        "http://localhost:8082/api/balance_sheet/add",
+        "http://localhost:8080/api/balance_sheet/add",
         {
           method: "POST",
           headers: {

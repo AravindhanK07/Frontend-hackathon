@@ -7,15 +7,13 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Typography,
   Box,
   styled,
-  Button,
+  IconButton,
   Alert,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import PurchaseModel from "../Modals/purchaseModel";
-import { IconButton } from "@mui/material";
 
 const StyledTableCell = styled(TableCell)({
   color: "red",
@@ -30,17 +28,22 @@ const PurchaseTable = () => {
   const [formData, setFormData] = useState({
     purchase_id: "",
     vendor_id: "",
+    invoice_no: "",
     purchase_date: "",
+    product_name: "",
+    sku_code: "",
     amount: "",
     tax: "",
+    total_amount: "",
     payment_method: "",
     status: "",
+    entered_by: "",
   });
   const [alertMessage, setAlertMessage] = useState("");
 
   const fetchData = async () => {
     try {
-      const response = await fetch("http://localhost:8082/api/GetAllPurchases");
+      const response = await fetch("http://localhost:8080/api/GetAllPurchases");
       const result = await response.json();
       if (result) {
         setData(result.data);
@@ -60,13 +63,18 @@ const PurchaseTable = () => {
 
   const handleAddNewEntry = () => {
     setFormData({
-      vendor_name: "",
-      purchase_number: "",
+      purchase_id: "",
+      vendor_id: "",
+      invoice_no: "",
       purchase_date: "",
-      net_amount: "",
+      product_name: "",
+      sku_code: "",
+      amount: "",
       tax: "",
+      total_amount: "",
       payment_method: "",
-      payment_status: "",
+      status: "",
+      entered_by: "",
     });
     setAlertMessage("");
     setModalOpen(true);
@@ -77,22 +85,48 @@ const PurchaseTable = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    // Validate required fields
     if (
-      !formData.vendor_name ||
-      !formData.purchase_number ||
+      !formData.vendor_id ||
+      !formData.invoice_no ||
       !formData.purchase_date ||
-      !formData.net_amount ||
+      !formData.product_name ||
+      !formData.sku_code ||
+      !formData.amount ||
       !formData.tax ||
+      !formData.total_amount ||
       !formData.payment_method ||
-      !formData.payment_status
+      !formData.status ||
+      !formData.entered_by
     ) {
       setAlertMessage("All fields are required!");
       return;
     }
 
-    setData([...data, { ...formData, id: data.length + 1 }]);
-    setModalOpen(false);
+    try {
+      // Send POST request to the API
+      const response = await fetch("http://localhost:8080/api/CreatePurchase", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log("Purchase created successfully:", result);
+        setModalOpen(false);
+        fetchData(); // Refresh the table data
+      } else {
+        console.error("Failed to create purchase:", response.statusText);
+        setAlertMessage("Failed to create purchase. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error creating purchase:", error);
+      setAlertMessage("An error occurred. Please try again.");
+    }
   };
 
   return (
@@ -114,7 +148,8 @@ const PurchaseTable = () => {
             "&:hover": {
               backgroundColor: "#1565c0",
             },
-          }}>
+          }}
+        >
           <AddIcon />
         </IconButton>
       </Box>
@@ -124,11 +159,16 @@ const PurchaseTable = () => {
             <TableRow>
               <StyledTableCell>Purchase ID</StyledTableCell>
               <StyledTableCell>Vendor ID</StyledTableCell>
+              <StyledTableCell>Invoice No</StyledTableCell>
               <StyledTableCell>Purchase Date</StyledTableCell>
+              <StyledTableCell>Product Name</StyledTableCell>
+              <StyledTableCell>SKU Code</StyledTableCell>
               <StyledTableCell>Amount</StyledTableCell>
               <StyledTableCell>Tax</StyledTableCell>
+              <StyledTableCell>Total Amount</StyledTableCell>
               <StyledTableCell>Payment Method</StyledTableCell>
-              <StyledTableCell>Payment Status</StyledTableCell>
+              <StyledTableCell>Status</StyledTableCell>
+              <StyledTableCell>Entered By</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -137,16 +177,21 @@ const PurchaseTable = () => {
                 <TableRow key={row.id}>
                   <TableCell align="center">{row.purchase_id}</TableCell>
                   <TableCell align="center">{row.vendor_id}</TableCell>
+                  <TableCell align="center">{row.invoice_no}</TableCell>
                   <TableCell align="center">{row.purchase_date}</TableCell>
+                  <TableCell align="center">{row.product_name}</TableCell>
+                  <TableCell align="center">{row.sku_code}</TableCell>
                   <TableCell align="center">{row.amount}</TableCell>
                   <TableCell align="center">{row.tax}</TableCell>
+                  <TableCell align="center">{row.total_amount}</TableCell>
                   <TableCell align="center">{row.payment_method}</TableCell>
                   <TableCell align="center">{row.status}</TableCell>
+                  <TableCell align="center">{row.entered_by}</TableCell>
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={7} align="center">
+                <TableCell colSpan={12} align="center">
                   No Purchase data available.
                 </TableCell>
               </TableRow>

@@ -41,7 +41,7 @@ const SalesTable = () => {
   // Fetch sales data
   const fetchData = async () => {
     try {
-      const response = await fetch("http://localhost:8082/api/GetAllSales");
+      const response = await fetch("http://localhost:8080/api/GetAllSales");
       const result = await response.json();
       if (result) {
         setData(result.data);
@@ -63,7 +63,7 @@ const SalesTable = () => {
     if (createSale) {
       const handleCreateSale = async () => {
         try {
-          const response = await fetch("http://localhost:8082/api/sales/add", {
+          const response = await fetch("http://localhost:8080/api/sales/add", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -148,7 +148,8 @@ const SalesTable = () => {
             "&:hover": {
               backgroundColor: "#1565c0",
             },
-          }}>
+          }}
+        >
           <AddIcon />
         </IconButton>
       </Box>
