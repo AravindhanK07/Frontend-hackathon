@@ -84,7 +84,7 @@ const LoginPage = () => {
     try {
       // Make API call to login
       const response = await axios.post(
-        "http://localhost:8082/login",
+        "http://localhost:8080/login",
         formData
       );
 

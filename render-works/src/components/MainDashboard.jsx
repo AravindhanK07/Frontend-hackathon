@@ -14,7 +14,7 @@ export const MainDashboard = () => {
 
   const salesKpi = async () => {
     try {
-      const response = await axios.get("http://localhost:8082/api/salesKPI1");
+      const response = await axios.get("http://localhost:8080/api/salesKPI1");
       console.log("Full Response:", response.data);
 
       // Destructure and remove status & msg keys
@@ -29,7 +29,7 @@ export const MainDashboard = () => {
   const topFiveProduct = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8082/api/topFiveProduct"
+        "http://localhost:8080/api/topFiveProduct"
       );
       console.log("Full Response:", response.data);
 
@@ -45,7 +45,7 @@ export const MainDashboard = () => {
   const GetExpensesVsSales = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8082/api/GetExpensesVsSales"
+        "http://localhost:8080/api/GetExpensesVsSales"
       );
       console.log("Full Response:", response.data);
 
@@ -60,7 +60,7 @@ export const MainDashboard = () => {
   };
   const GetKPIData3 = async () => {
     try {
-      const response = await axios.get("http://localhost:8082/api/GetKPIData3");
+      const response = await axios.get("http://localhost:8080/api/GetKPIData3");
       console.log("Full Response:", response.data);
 
       // Extract and round all numeric values
@@ -81,7 +81,7 @@ export const MainDashboard = () => {
   const FetchMetricData = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8082/api/FetchMetricsData"
+        "http://localhost:8080/api/FetchMetricsData"
       );
       console.log("Full Response:", response.data);
 
@@ -123,7 +123,7 @@ export const MainDashboard = () => {
             Total sales
           </p>
 
-          <p class="ml-2 text-gray-100 text-lg dark:text-gray-50">
+          <p class="ml-2 text-gray-100 text-2xl dark:text-gray-50">
             {salesKpiData?.ytd_sales}
           </p>
         </Paper>
@@ -145,7 +145,7 @@ export const MainDashboard = () => {
             Total purchase
           </p>
 
-          <p class="ml-2 text-gray-100 text-lg dark:text-gray-50">
+          <p class="ml-2 text-gray-100 text-2xl dark:text-gray-50">
             {salesKpiData?.ytd_purchase}
           </p>
         </Paper>
@@ -190,14 +190,14 @@ export const MainDashboard = () => {
             Net profit
           </p>
 
-          <p class="ml-2 text-gray-100 text-lg dark:text-gray-50">
+          <p class="ml-2 text-gray-100 text-2xl dark:text-gray-50">
             {salesKpiData?.net_profit}
           </p>
         </Paper>
       </Grid>
 
       {/* 2nd Row: 1 Full-Width Column */}
-      <Grid item xs={12}>
+      <Grid item xs={12} sm={6}>
         <div
           sx={{
             padding: 2,
@@ -212,6 +212,22 @@ export const MainDashboard = () => {
           }}
         >
           <ScrollColumn2D expensesVsSales={expensesVsSales} />
+        </div>
+      </Grid>
+      <Grid item xs={12} sm={6}>
+        <div
+          sx={{
+            padding: 2,
+            textAlign: "center",
+            backgroundColor: "#f5f5f5",
+            height: 150,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Doughnut2D topFiveProductData={topFiveProductData} />
         </div>
       </Grid>
 
@@ -254,7 +270,7 @@ export const MainDashboard = () => {
             Sku holding cost
           </p>
 
-          <p class="ml-2 text-gray-100 text-lg dark:text-gray-50">
+          <p class="ml-2 text-gray-100 text-2xl dark:text-gray-50">
             {kpiData3?.sku_holding_cost}
           </p>
         </Paper>
@@ -298,7 +314,7 @@ export const MainDashboard = () => {
             Average transaction value
           </p>
 
-          <p class="ml-2 text-gray-100 text-lg dark:text-gray-50">
+          <p class="ml-2 text-gray-100 text-2xl dark:text-gray-50">
             {kpiData3?.average_transaction_value}
           </p>
         </Paper>
@@ -343,7 +359,7 @@ export const MainDashboard = () => {
             Footfall conversion rate
           </p>
 
-          <p class="ml-2 text-gray-100 text-lg dark:text-gray-50">
+          <p class="ml-2 text-gray-100 text-2xl dark:text-gray-50">
             {kpiData3?.footfall_conversion_rate}
           </p>
         </Paper>
@@ -387,7 +403,7 @@ export const MainDashboard = () => {
             Expense to revenue ratio
           </p>
 
-          <p class="ml-2 text-gray-100 text-lg dark:text-gray-50">
+          <p class="ml-2 text-gray-100 text-2xl dark:text-gray-50">
             {metricData?.expense_to_revenue_ratio}
           </p>
         </Paper>
@@ -428,10 +444,10 @@ export const MainDashboard = () => {
             </IconButton>
           </Tooltip>
           <p class="my-4 text-3xl font-bold text-left text-gray-100 dark:text-white text-center">
-            Revenue cost due to stock
+            Lost Sales Due to Stockouts
           </p>
 
-          <p class="ml-2 text-gray-100 text-lg dark:text-gray-50">
+          <p class="ml-2 text-gray-100 text-2xl dark:text-gray-50">
             {metricData?.revenue_lost_due_to_stock}
           </p>
         </Paper>
@@ -476,7 +492,7 @@ export const MainDashboard = () => {
             Profit margin
           </p>
 
-          <p class="ml-2 text-gray-100 text-lg dark:text-gray-50">
+          <p class="ml-2 text-gray-100 text-2xl dark:text-gray-50">
             {metricData?.profit_margin}
           </p>
         </Paper>
@@ -520,7 +536,7 @@ export const MainDashboard = () => {
             Top selling SKU
           </p>
 
-          <p class="ml-2 text-gray-100 text-lg dark:text-gray-50">
+          <p class="ml-2 text-gray-100 text-2xl dark:text-gray-50">
             {metricData?.top_selling_sku}
           </p>
         </Paper>
@@ -564,26 +580,10 @@ export const MainDashboard = () => {
             Inventory cost
           </p>
 
-          <p class="ml-2 text-gray-100 text-lg dark:text-gray-50">
+          <p class="ml-2 text-gray-100 text-2xl dark:text-gray-50">
             {metricData?.inventory_cost}
           </p>
         </Paper>
-      </Grid>
-      <Grid item xs={12} sm={4}>
-        <div
-          sx={{
-            padding: 2,
-            textAlign: "center",
-            backgroundColor: "#f5f5f5",
-            height: 150,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Doughnut2D topFiveProductData={topFiveProductData} />
-        </div>
       </Grid>
     </Grid>
   );

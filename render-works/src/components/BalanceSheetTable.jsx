@@ -41,7 +41,7 @@ const BalanceSheetTable = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8082/api/account_data"
+        "http://localhost:8080/api/account_data"
       );
       console.log(response.data);
 
@@ -99,7 +99,7 @@ const BalanceSheetTable = () => {
       // Simulate API call to add new expense
       const jwt_code = sessionStorage.getItem("user");
       const response = await fetch(
-        "http://localhost:8082/api/balance_sheet/add",
+        "http://localhost:8080/api/balance_sheet/add",
         {
           method: "POST",
           headers: {
@@ -141,8 +141,7 @@ const BalanceSheetTable = () => {
           justifyContent: "space-between",
           alignItems: "center",
           padding: "15px",
-        }}
-      >
+        }}>
         <Typography variant="h4" sx={{ padding: 0, margin: 0 }} gutterBottom>
           Account Management
         </Typography>
@@ -158,8 +157,7 @@ const BalanceSheetTable = () => {
             alignItems: "center",
             justifyContent: "center",
           }}
-          onClick={handleOpenModal}
-        >
+          onClick={handleOpenModal}>
           <AddIcon />
         </Button>
       </Box>
@@ -169,8 +167,7 @@ const BalanceSheetTable = () => {
           display: "flex",
           justifyContent: "flex-end",
           marginBottom: "15px",
-        }}
-      >
+        }}>
         <Tabs
           value={tabValue}
           onChange={handleTabChange}
@@ -187,8 +184,7 @@ const BalanceSheetTable = () => {
             style: {
               display: "none",
             },
-          }}
-        >
+          }}>
           <Tab label="Fixed Expenses" />
           <Tab label="Variable Expenses" />
         </Tabs>
@@ -198,11 +194,31 @@ const BalanceSheetTable = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell align="center">S.no</TableCell>
-              <TableCell align="center">Expense Category</TableCell>
-              <TableCell align="center">Amount</TableCell>
-              <TableCell align="center">Due Date</TableCell>
-              <TableCell align="center">Status</TableCell>
+              <TableCell
+                align="center"
+                sx={{ color: "red", fontFamily: "Roboto", fontWeight: "bold" }}>
+                S.no
+              </TableCell>
+              <TableCell
+                align="center"
+                sx={{ color: "red", fontFamily: "Roboto", fontWeight: "bold" }}>
+                Expense Category
+              </TableCell>
+              <TableCell
+                align="center"
+                sx={{ color: "red", fontFamily: "Roboto", fontWeight: "bold" }}>
+                Amount
+              </TableCell>
+              <TableCell
+                align="center"
+                sx={{ color: "red", fontFamily: "Roboto", fontWeight: "bold" }}>
+                Due Date
+              </TableCell>
+              <TableCell
+                align="center"
+                sx={{ color: "red", fontFamily: "Roboto", fontWeight: "bold" }}>
+                Status
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -223,8 +239,7 @@ const BalanceSheetTable = () => {
         open={openModal}
         onClose={(event, reason) => {
           if (reason !== "backdropClick") handleCloseModal();
-        }}
-      >
+        }}>
         <Box
           sx={{
             position: "absolute",
@@ -236,8 +251,7 @@ const BalanceSheetTable = () => {
             boxShadow: 24,
             p: 4,
             borderRadius: "8px",
-          }}
-        >
+          }}>
           {/* Close Button */}
           <IconButton
             onClick={handleCloseModal}
@@ -245,8 +259,7 @@ const BalanceSheetTable = () => {
               position: "absolute",
               top: 8,
               right: 8,
-            }}
-          >
+            }}>
             <CloseIcon />
           </IconButton>
 
@@ -295,8 +308,7 @@ const BalanceSheetTable = () => {
             select
             value={newExpense.payment_method}
             onChange={handleInputChange}
-            sx={{ mb: 2 }}
-          >
+            sx={{ mb: 2 }}>
             <MenuItem value="Card">Card</MenuItem>
             <MenuItem value="Cash">Cash</MenuItem>
           </TextField>
@@ -308,8 +320,7 @@ const BalanceSheetTable = () => {
             select
             value={newExpense.type}
             onChange={handleInputChange}
-            sx={{ mb: 2 }}
-          >
+            sx={{ mb: 2 }}>
             <MenuItem value="fixed">Fixed</MenuItem>
             <MenuItem value="variable">Variable</MenuItem>
           </TextField>
@@ -319,8 +330,7 @@ const BalanceSheetTable = () => {
             <Button
               variant="contained"
               onClick={handleAddExpense}
-              sx={{ backgroundColor: "red", color: "white" }}
-            >
+              sx={{ backgroundColor: "red", color: "white" }}>
               Add
             </Button>
           </Box>

@@ -147,7 +147,7 @@ const RegisterPage = () => {
       // };
       // console.log(formattedData);
       // const response = await axios.post(
-      //   "http://localhost:8082/register",
+      //   "http://localhost:8080/register",
       //   formData // This should be the request body
       // );
 
@@ -160,7 +160,7 @@ const RegisterPage = () => {
 
       // Make API call
       const response = await axios.post(
-        "http://localhost:8082/register",
+        "http://localhost:8080/register",
         payload // Send the modified payload
       );
 
