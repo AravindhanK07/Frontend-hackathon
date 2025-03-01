@@ -28,27 +28,33 @@ const PurchaseTable = () => {
   const [data, setData] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [formData, setFormData] = useState({
-    vendor_name: "",
-    purchase_number: "",
+    purchase_id: "",
+    vendor_id: "",
     purchase_date: "",
-    net_amount: "",
+    amount: "",
     tax: "",
     payment_method: "",
-    payment_status: "",
+    status: "",
   });
   const [alertMessage, setAlertMessage] = useState("");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("https://api.example.com/sales");
-        const result = await response.json();
-        setData(result);
-      } catch (error) {
-        console.error("Error fetching sales data:", error);
+  const fetchData = async () => {
+    try {
+      const response = await fetch("http://localhost:8082/api/GetAllPurchases");
+      const result = await response.json();
+      if (result) {
+        setData(result.data);
+      } else {
+        console.error("Unexpected API response:", result);
+        setData([]);
       }
-    };
+    } catch (error) {
+      console.error("Error fetching sales data:", error);
+      setData([]);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -116,29 +122,35 @@ const PurchaseTable = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <StyledTableCell>Vendor Name</StyledTableCell>
-              <StyledTableCell>Purchase Number</StyledTableCell>
+              <StyledTableCell>Purchase ID</StyledTableCell>
+              <StyledTableCell>Vendor ID</StyledTableCell>
               <StyledTableCell>Purchase Date</StyledTableCell>
-              <StyledTableCell>Net Amount</StyledTableCell>
+              <StyledTableCell>Amount</StyledTableCell>
               <StyledTableCell>Tax</StyledTableCell>
-              <StyledTableCell>Total Amount</StyledTableCell>
               <StyledTableCell>Payment Method</StyledTableCell>
               <StyledTableCell>Payment Status</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((row) => (
-              <TableRow key={row.id}>
-                <TableCell align="center">{row.vendor_name}</TableCell>
-                <TableCell align="center">{row.purchase_number}</TableCell>
-                <TableCell align="center">{row.purchase_date}</TableCell>
-                <TableCell align="center">{row.net_amount}</TableCell>
-                <TableCell align="center">{row.tax}</TableCell>
-                <TableCell align="center">{row.total_amount}</TableCell>
-                <TableCell align="center">{row.payment_method}</TableCell>
-                <TableCell align="center">{row.payment_status}</TableCell>
+            {Array.isArray(data) && data.length > 0 ? (
+              data.map((row) => (
+                <TableRow key={row.id}>
+                  <TableCell align="center">{row.purchase_id}</TableCell>
+                  <TableCell align="center">{row.vendor_id}</TableCell>
+                  <TableCell align="center">{row.purchase_date}</TableCell>
+                  <TableCell align="center">{row.amount}</TableCell>
+                  <TableCell align="center">{row.tax}</TableCell>
+                  <TableCell align="center">{row.payment_method}</TableCell>
+                  <TableCell align="center">{row.status}</TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={7} align="center">
+                  No Purchase data available.
+                </TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </TableContainer>

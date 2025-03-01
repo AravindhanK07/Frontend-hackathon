@@ -7,15 +7,13 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Typography,
   Box,
   styled,
-  Button,
+  IconButton,
   Alert,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import SalesModel from "../Modals/SalesModel";
-import { IconButton } from "@mui/material";
 
 const StyledTableCell = styled(TableCell)({
   color: "red",
@@ -28,30 +26,70 @@ const SalesTable = () => {
   const [data, setData] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [formData, setFormData] = useState({
-    customer_name: "",
-    invoice_number: "",
-    invoice_date: "",
-    net_amount: "",
+    customer_id: "",
+    invoice_no: "",
+    amount: "",
     tax: "",
     total_amount: "",
     payment_method: "",
-    payment_status: "",
+    status: "",
   });
+
   const [alertMessage, setAlertMessage] = useState("");
+  const [createSale, setCreateSale] = useState(null); // New state to trigger sale creation
+
+  // Fetch sales data
+  const fetchData = async () => {
+    try {
+      const response = await fetch("http://localhost:8082/api/GetAllSales");
+      const result = await response.json();
+      if (result) {
+        setData(result.data);
+      } else {
+        console.error("Unexpected API response:", result);
+        setData([]);
+      }
+    } catch (error) {
+      console.error("Error fetching sales data:", error);
+      setData([]);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("https://api.example.com/sales");
-        const result = await response.json();
-        setData(result);
-      } catch (error) {
-        console.error("Error fetching sales data:", error);
-      }
-    };
-
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (createSale) {
+      const handleCreateSale = async () => {
+        try {
+          const response = await fetch("http://localhost:8082/api/sales/add", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer your-token",
+            },
+            body: JSON.stringify(createSale),
+          });
+
+          const result = await response.json();
+          if (response.ok) {
+            setAlertMessage(""); // Clear alert on successful save
+            setModalOpen(false); // Close the modal
+            fetchData(); // Re-fetch the sales data after creation
+          } else {
+            setAlertMessage(result.message || "Failed to create sale entry.");
+          }
+        } catch (error) {
+          console.error("Error saving data:", error);
+          setAlertMessage("Something went wrong. Please try again.");
+        }
+      };
+
+      handleCreateSale();
+      setCreateSale(null);
+    }
+  }, [createSale]);
 
   const handleAddNewEntry = () => {
     setFormData({
@@ -88,8 +126,8 @@ const SalesTable = () => {
       return;
     }
 
-    setData([...data, { ...formData, id: data.length + 1 }]);
-    setModalOpen(false);
+    // Trigger the new useEffect to create the sale by updating `createSale` state
+    setCreateSale(formData);
   };
 
   return (
@@ -104,7 +142,6 @@ const SalesTable = () => {
             color: "#fff",
             width: 48,
             height: 48,
-            paddingLeft: "10px",
             padding: "10px",
             marginRight: "10px",
             marginTop: "10px",
@@ -119,29 +156,39 @@ const SalesTable = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <StyledTableCell>Customer Name</StyledTableCell>
+              <StyledTableCell>ID</StyledTableCell>
               <StyledTableCell>Invoice Number</StyledTableCell>
-              <StyledTableCell>Invoice Date</StyledTableCell>
-              <StyledTableCell>Net Amount</StyledTableCell>
-              <StyledTableCell>Tax</StyledTableCell>
+              <StyledTableCell>Customer ID</StyledTableCell>
+              <StyledTableCell>Product</StyledTableCell>
+              <StyledTableCell>Ordered Date</StyledTableCell>
+              <StyledTableCell>Amount</StyledTableCell>
               <StyledTableCell>Total Amount</StyledTableCell>
               <StyledTableCell>Payment Method</StyledTableCell>
-              <StyledTableCell>Payment Status</StyledTableCell>
+              <StyledTableCell>Status</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((row) => (
-              <TableRow key={row.id}>
-                <TableCell align="center">{row.customer_name}</TableCell>
-                <TableCell align="center">{row.invoice_number}</TableCell>
-                <TableCell align="center">{row.invoice_date}</TableCell>
-                <TableCell align="center">{row.net_amount}</TableCell>
-                <TableCell align="center">{row.tax}</TableCell>
-                <TableCell align="center">{row.total_amount}</TableCell>
-                <TableCell align="center">{row.payment_method}</TableCell>
-                <TableCell align="center">{row.payment_status}</TableCell>
+            {Array.isArray(data) && data.length > 0 ? (
+              data.map((row) => (
+                <TableRow key={row.id}>
+                  <TableCell align="center">{row.id}</TableCell>
+                  <TableCell align="center">{row.invoice_no}</TableCell>
+                  <TableCell align="center">{row.customer_id}</TableCell>
+                  <TableCell align="center">{row.product}</TableCell>
+                  <TableCell align="center">{row.ordered_date}</TableCell>
+                  <TableCell align="center">{row.amount}</TableCell>
+                  <TableCell align="center">{row.total_amount}</TableCell>
+                  <TableCell align="center">{row.payment_method}</TableCell>
+                  <TableCell align="center">{row.status}</TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={9} align="center">
+                  No sales data available.
+                </TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </TableContainer>
