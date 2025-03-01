@@ -21,6 +21,7 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import BalanceIcon from "@mui/icons-material/AccountBalance";
 import HelpIcon from "@mui/icons-material/HelpOutline";
+import HomeIcon from "@mui/icons-material/Home"; // Import HomeIcon
 import { Link, Outlet, useNavigate } from "react-router-dom";
 
 // Navigation items for the sidebar
@@ -133,8 +134,7 @@ function DashboardLayoutBranding(props) {
               "&:hover": {
                 backgroundColor: "#e0e0e0", // Light gray hover effect
               },
-            }}
-          >
+            }}>
             <ListItemIcon>{nav.icon}</ListItemIcon>
             <ListItemText primary={nav.title} />
           </ListItem>
@@ -155,62 +155,75 @@ function DashboardLayoutBranding(props) {
           position="fixed"
           sx={{
             zIndex: (theme) => theme.zIndex.drawer + 1, // Ensures AppBar is above the Drawer
-          }}
-        >
-          <Toolbar>
-            <Typography
-              variant="h4"
-              noWrap
-              component="div"
-              sx={{ flexGrow: 1 }}
-            >
-              Hisab
-            </Typography>
-            <IconButton
-              aria-label="account menu"
-              aria-controls="account-menu"
-              aria-haspopup="true"
-              onClick={handleMenuOpen}
-              sx={{ p: 0 }}
-            >
-              <Avatar
-                alt={session?.user?.name}
-                sx={{
-                  width: 40,
-                  height: 40,
-                  bgcolor: "white",
-                  color: "#538cf0",
-                  fontWeight: "bold",
-                }}
-              >
-                {userInitial}
-              </Avatar>
-            </IconButton>
-            <Menu
-              id="account-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleMenuClose}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "right",
-              }}
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              PaperProps={{
-                sx: {
-                  mt: 1.5,
-                  minWidth: 180,
-                },
-              }}
-            >
-              <MenuItem onClick={handleMenuClose}>User</MenuItem>
+          }}>
+      <Toolbar
+  sx={{
+    display: "flex", // Enables flexbox layout
+    flexDirection: "row", // Aligns items in a horizontal row
+    justifyContent: "space-between", // Spaces elements evenly across the toolbar
+    alignItems: "center", // Centers items vertically
+  }}
+>
+  {/* Home Icon */}
+  <IconButton
+    aria-label="home"
+    color="inherit"
+    onClick={() => navigate("/")} // Navigate to home
+    sx={{ mr: 1 }}
+  >
+    <HomeIcon sx={{ fontSize: 35 }} /> {/* Increased icon size */}
+  </IconButton>
 
-              <MenuItem onClick={handleLogout}>Logout</MenuItem>
-            </Menu>
-          </Toolbar>
+  {/* User Avatar and Menu */}
+  <Box sx={{ display: "flex", alignItems: "center" }}>
+    <IconButton
+      aria-label="account menu"
+      aria-controls="account-menu"
+      aria-haspopup="true"
+      onClick={handleMenuOpen}
+      sx={{ p: 0 }}
+    >
+      <Avatar
+        alt={session?.user?.name}
+        sx={{
+          width: 40, // Avatar width
+          height: 40, // Avatar height
+          bgcolor: "white", // White background
+          color: "#538cf0", // Blue text color
+          fontWeight: "bold", // Bold font for initials
+        }}
+      >
+        {userInitial}
+      </Avatar>
+    </IconButton>
+
+    {/* Dropdown Menu */}
+    <Menu
+      id="account-menu"
+      anchorEl={anchorEl}
+      open={open}
+      onClose={handleMenuClose}
+      anchorOrigin={{
+        vertical: "bottom",
+        horizontal: "right",
+      }}
+      transformOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      PaperProps={{
+        sx: {
+          mt: 1.5, // Margin on top
+          minWidth: 180, // Minimum width of menu
+        },
+      }}
+    >
+      <MenuItem onClick={handleMenuClose}>User</MenuItem>
+      <MenuItem onClick={handleLogout}>Logout</MenuItem>
+    </Menu>
+  </Box>
+</Toolbar>
+
         </AppBar>
 
         {/* Sidebar */}
@@ -224,8 +237,7 @@ function DashboardLayoutBranding(props) {
               width: drawerWidth,
               boxSizing: "border-box",
             },
-          }}
-        >
+          }}>
           {drawer}
         </Drawer>
 
@@ -236,8 +248,7 @@ function DashboardLayoutBranding(props) {
             flexGrow: 1,
             p: 3,
             width: `calc(100% - ${drawerWidth}px)`,
-          }}
-        >
+          }}>
           <Toolbar /> {/* Offset content below the header */}
           <Outlet /> {/* Render nested routes here */}
         </Box>
