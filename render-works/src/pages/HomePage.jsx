@@ -6,6 +6,7 @@ import { createTheme } from "@mui/material/styles";
 import { AppProvider } from "@toolpad/core/AppProvider";
 import { DashboardLayout } from "@toolpad/core/DashboardLayout";
 import { useDemoRouter } from "@toolpad/core/internal";
+import { useNavigate } from "react-router-dom";
 import "../style.css";
 
 import {
@@ -16,36 +17,14 @@ import {
   TableHead,
   TableRow,
   Paper,
-  colors,
+  IconButton,
 } from "@mui/material";
 
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
-
-const NAVIGATION = [
-  {
-    segment: "sales",
-    title: "Sales",
-    icon: <AttachMoneyIcon />,
-  },
-  {
-    segment: "purchase",
-    title: "Purchase",
-    icon: <ShoppingCartIcon />,
-  },
-  {
-    segment: "balance-sheet",
-    title: "Balance Sheet",
-    icon: <AccountBalanceIcon />,
-  },
-  {
-    segment: "how-to-use",
-    title: "How to Use",
-    icon: <HelpOutlineIcon />,
-  },
-];
+import HomeIcon from "@mui/icons-material/Home";
 
 const demoTheme = createTheme({
   cssVariables: {
@@ -131,9 +110,9 @@ function DemoPageContent({ pathname }) {
     case "/sales":
       data = sampleData.sales;
       columns = [
-        { field: "product", headerName: "Product", colors: "red" },
-        { field: "quantity", headerName: "Quantity", colors: "red" },
-        { field: "revenue", headerName: "Revenue", colors: "red" },
+        { field: "product", headerName: "Product" },
+        { field: "quantity", headerName: "Quantity" },
+        { field: "revenue", headerName: "Revenue" },
       ];
       break;
     case "/purchase":
@@ -171,8 +150,7 @@ function DemoPageContent({ pathname }) {
         flexDirection: "column",
         alignItems: "center",
         textAlign: "center",
-      }}
-    >
+      }}>
       <Typography variant="h4" gutterBottom>
         {NAVIGATION.find((nav) => nav.segment === pathname.slice(1))?.title}
       </Typography>
@@ -185,13 +163,12 @@ DemoPageContent.propTypes = {
   pathname: PropTypes.string.isRequired,
 };
 
-// Dashboard layout with custom branding
+// Dashboard layout with navigation
 function DashboardLayoutBranding(props) {
   const { window } = props;
-
   const router = useDemoRouter("/dashboard");
+  const navigate = useNavigate();
 
-  // Remove this const when copying and pasting into your project.
   const demoWindow = window !== undefined ? window() : undefined;
 
   return (
@@ -204,9 +181,15 @@ function DashboardLayoutBranding(props) {
       }}
       router={router}
       theme={demoTheme}
-      window={demoWindow}
-    >
+      window={demoWindow}>
       <DashboardLayout>
+        {/* Home Button - Positioned at the Top Right */}
+        <Box sx={{ position: "absolute", top: 16, right: 16 }}>
+          <IconButton color="primary" onClick={() => navigate("/")}>
+            <HomeIcon />
+          </IconButton>
+        </Box>
+
         <DemoPageContent pathname={router.pathname} />
       </DashboardLayout>
     </AppProvider>
