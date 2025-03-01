@@ -10,7 +10,8 @@ import {
   Box,
   styled,
   IconButton,
-  Alert,
+  Snackbar,
+  Alert as MuiAlert,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import SalesModel from "../Modals/SalesModel";
@@ -33,9 +34,14 @@ const SalesTable = () => {
     total_amount: "",
     payment_method: "",
     status: "",
+    product: "",
+    sku: "",
+    ordered_date: "",
+    entered_by: "",
   });
-
-  const [alertMessage, setAlertMessage] = useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("info"); // Can be "error", "warning", "info", "success"
   const [createSale, setCreateSale] = useState(null); // New state to trigger sale creation
 
   // Fetch sales data
@@ -63,26 +69,43 @@ const SalesTable = () => {
     if (createSale) {
       const handleCreateSale = async () => {
         try {
+          // Convert numeric fields to numbers
+          const payload = {
+            ...createSale,
+            customer_id: parseFloat(createSale.customer_id),
+            amount: parseFloat(createSale.amount),
+            tax: parseFloat(createSale.tax),
+            total_amount: parseFloat(createSale.total_amount),
+          };
+
           const response = await fetch("http://localhost:8080/api/sales/add", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
               Authorization: "Bearer your-token",
             },
-            body: JSON.stringify(createSale),
+            body: JSON.stringify(payload),
           });
 
           const result = await response.json();
           if (response.ok) {
-            setAlertMessage(""); // Clear alert on successful save
+            setSnackbarMessage("Sale created successfully!");
+            setSnackbarSeverity("success");
+            setSnackbarOpen(true);
             setModalOpen(false); // Close the modal
             fetchData(); // Re-fetch the sales data after creation
           } else {
-            setAlertMessage(result.message || "Failed to create sale entry.");
+            setSnackbarMessage(
+              result.message || "Failed to create sale entry."
+            );
+            setSnackbarSeverity("error");
+            setSnackbarOpen(true);
           }
         } catch (error) {
           console.error("Error saving data:", error);
-          setAlertMessage("Something went wrong. Please try again.");
+          setSnackbarMessage("Something went wrong. Please try again.");
+          setSnackbarSeverity("error");
+          setSnackbarOpen(true);
         }
       };
 
@@ -93,16 +116,19 @@ const SalesTable = () => {
 
   const handleAddNewEntry = () => {
     setFormData({
-      customer_name: "",
-      invoice_number: "",
-      invoice_date: "",
-      net_amount: "",
+      customer_id: "",
+      invoice_no: "",
+      amount: "",
       tax: "",
       total_amount: "",
       payment_method: "",
-      payment_status: "",
+      status: "",
+      product: "",
+      sku: "",
+      ordered_date: "",
+      entered_by: "",
     });
-    setAlertMessage("");
+    setSnackbarMessage("");
     setModalOpen(true);
   };
 
@@ -113,16 +139,21 @@ const SalesTable = () => {
 
   const handleSave = () => {
     if (
-      !formData.customer_name ||
-      !formData.invoice_number ||
-      !formData.invoice_date ||
-      !formData.net_amount ||
+      !formData.customer_id ||
+      !formData.invoice_no ||
+      !formData.amount ||
       !formData.tax ||
       !formData.total_amount ||
       !formData.payment_method ||
-      !formData.payment_status
+      !formData.status ||
+      !formData.product ||
+      !formData.sku ||
+      !formData.ordered_date ||
+      !formData.entered_by
     ) {
-      setAlertMessage("All fields are required!");
+      setSnackbarMessage("All fields are required!");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
       return;
     }
 
@@ -130,9 +161,15 @@ const SalesTable = () => {
     setCreateSale(formData);
   };
 
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false);
+  };
+
   return (
     <Box>
-      {alertMessage && <Alert severity="error">{alertMessage}</Alert>}
       <Box display="flex" justifyContent="flex-end" mb={2}>
         <IconButton
           color="primary"
@@ -201,6 +238,22 @@ const SalesTable = () => {
         handleInputChange={handleInputChange}
         handleSave={handleSave}
       />
+
+      {/* Snackbar for displaying messages */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000} // Adjust duration as needed
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }} // Adjust position as needed
+      >
+        <MuiAlert
+          onClose={handleCloseSnackbar}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
     </Box>
   );
 };

@@ -70,14 +70,17 @@ function DashboardLayoutBranding(props) {
   const open = Boolean(anchorEl);
 
   // Mock session state
-  const [session, setSession] = React.useState({
-    user: {
-      name: "John Doe",
-      email: "john.doe@example.com",
-    },
-  });
+  // const [session, setSession] = React.useState({
+  //   user: {
+  //     name: "John Doe",
+  //     email: "john.doe@example.com",
+  //   },
+  // });
 
-  const userInitial = session?.user?.name ? session.user.name.charAt(0) : "";
+  const userString = sessionStorage.getItem("user");
+  const user = userString ? JSON.parse(userString) : null;
+  const userEmail = user?.email || "";
+  const userInitial = userEmail ? userEmail.charAt(0).toUpperCase() : "";
 
   // Handle dropdown menu open
   const handleMenuOpen = (event) => {
@@ -92,23 +95,8 @@ function DashboardLayoutBranding(props) {
   // Handle logout
   const handleLogout = async () => {
     navigate("/login");
-    try {
-      const response = await fetch("https://api.example.com/logout", {
-        method: "POST",
-        credentials: "include",
-      });
-
-      if (response.ok) {
-        setSession(null);
-        navigate("/login");
-      } else {
-        console.error("Logout failed");
-      }
-    } catch (error) {
-      console.error("Error during logout:", error);
-    } finally {
-      handleMenuClose();
-    }
+    sessionStorage.clear();
+    handleMenuClose();
   };
 
   // Drawer width
@@ -174,7 +162,7 @@ function DashboardLayoutBranding(props) {
               sx={{ p: 0 }}
             >
               <Avatar
-                alt={session?.user?.name}
+                alt={""}
                 sx={{
                   width: 40,
                   height: 40,
@@ -206,7 +194,7 @@ function DashboardLayoutBranding(props) {
                 },
               }}
             >
-              <MenuItem onClick={handleMenuClose}>User</MenuItem>
+              <MenuItem onClick={handleMenuClose}>{userEmail}</MenuItem>
 
               <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>

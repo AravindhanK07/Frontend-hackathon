@@ -471,7 +471,7 @@ export const MainDashboard = () => {
             title={
               <Typography variant="body2" sx={{ whiteSpace: "pre-line" }}>
                 {
-                  "Calculates the average amount spent per customer per transaction.\nFormula:\nATV=(Total Revenue/Total Transaction)"
+                  "Calculates the average amount spent per customer per transaction.ATV."
                 }
               </Typography>
             }

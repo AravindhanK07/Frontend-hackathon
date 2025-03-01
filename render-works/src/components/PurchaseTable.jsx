@@ -10,7 +10,8 @@ import {
   Box,
   styled,
   IconButton,
-  Alert,
+  Snackbar,
+  Alert as MuiAlert,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import PurchaseModel from "../Modals/purchaseModel";
@@ -39,7 +40,9 @@ const PurchaseTable = () => {
     status: "",
     entered_by: "",
   });
-  const [alertMessage, setAlertMessage] = useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("info"); // Can be "error", "warning", "info", "success"
 
   const fetchData = async () => {
     try {
@@ -76,7 +79,7 @@ const PurchaseTable = () => {
       status: "",
       entered_by: "",
     });
-    setAlertMessage("");
+    setSnackbarMessage("");
     setModalOpen(true);
   };
 
@@ -88,6 +91,7 @@ const PurchaseTable = () => {
   const handleSave = async () => {
     // Validate required fields
     if (
+      !formData.purchase_id || // Validate purchase_id
       !formData.vendor_id ||
       !formData.invoice_no ||
       !formData.purchase_date ||
@@ -100,38 +104,88 @@ const PurchaseTable = () => {
       !formData.status ||
       !formData.entered_by
     ) {
-      setAlertMessage("All fields are required!");
+      setSnackbarMessage("All fields are required!");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
       return;
     }
 
+    // Validate numeric fields
+    const numericFields = [
+      { name: "vendor_id", value: formData.vendor_id },
+      { name: "amount", value: formData.amount },
+      { name: "tax", value: formData.tax },
+      { name: "total_amount", value: formData.total_amount },
+    ];
+
+    let hasError = false;
+    const newErrors = {};
+
+    numericFields.forEach((field) => {
+      if (isNaN(field.value)) {
+        newErrors[field.name] =
+          `${field.name.replace(/_/g, " ")} must be a valid number`;
+        hasError = true;
+      }
+    });
+
+    if (hasError) {
+      setSnackbarMessage("Please correct the errors in the form.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+      return;
+    }
+
+    // Convert numeric fields to numbers
+    const payload = {
+      ...formData,
+      vendor_id: parseFloat(formData.vendor_id),
+      amount: parseFloat(formData.amount),
+      tax: parseFloat(formData.tax),
+      total_amount: parseFloat(formData.total_amount),
+    };
+
     try {
       // Send POST request to the API
-      const response = await fetch("http://localhost:8080/api/CreatePurchase", {
+      const response = await fetch("http://localhost:8080/api/purchases/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
 
       if (response.ok) {
         const result = await response.json();
         console.log("Purchase created successfully:", result);
+        setSnackbarMessage("Purchase created successfully!");
+        setSnackbarSeverity("success");
+        setSnackbarOpen(true);
         setModalOpen(false);
         fetchData(); // Refresh the table data
       } else {
         console.error("Failed to create purchase:", response.statusText);
-        setAlertMessage("Failed to create purchase. Please try again.");
+        setSnackbarMessage("Failed to create purchase. Please try again.");
+        setSnackbarSeverity("error");
+        setSnackbarOpen(true);
       }
     } catch (error) {
       console.error("Error creating purchase:", error);
-      setAlertMessage("An error occurred. Please try again.");
+      setSnackbarMessage("An error occurred. Please try again.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
     }
+  };
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false);
   };
 
   return (
     <Box>
-      {alertMessage && <Alert severity="error">{alertMessage}</Alert>}
       <Box display="flex" justifyContent="flex-end" mb={2}>
         <IconButton
           color="primary"
@@ -207,6 +261,22 @@ const PurchaseTable = () => {
         handleInputChange={handleInputChange}
         handleSave={handleSave}
       />
+
+      {/* Snackbar for displaying messages */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000} // Adjust duration as needed
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }} // Adjust position as needed
+      >
+        <MuiAlert
+          onClose={handleCloseSnackbar}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
     </Box>
   );
 };

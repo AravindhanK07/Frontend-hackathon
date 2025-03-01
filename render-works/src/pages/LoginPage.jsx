@@ -89,8 +89,11 @@ const LoginPage = () => {
       );
 
       if (response.status === 200) {
-        // Save user data in session storage
-        sessionStorage.setItem("user", JSON.stringify(response.data));
+        // Store user data along with email in session storage
+        sessionStorage.setItem(
+          "user",
+          JSON.stringify({ ...response.data, email: formData.email })
+        );
 
         // Redirect to home page
         navigate("/");
@@ -121,7 +124,7 @@ const LoginPage = () => {
     >
       <div className="grid grid-cols-2 w-full">
         <div className="p-8">
-          <h4 className="text-4xl font-bold text-white">My App</h4>
+          <h4 className="text-4xl font-bold text-white">Hisab</h4>
         </div>
 
         {/* Second div: Login form */}

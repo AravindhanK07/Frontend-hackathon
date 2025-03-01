@@ -7,7 +7,6 @@ import {
   TextField,
   DialogActions,
   Button,
-  Alert,
 } from "@mui/material";
 import "../style.css";
 
@@ -19,17 +18,18 @@ const PurchaseModel = ({
   handleSave,
 }) => {
   const [errors, setErrors] = useState({});
-  const [alertMessage, setAlertMessage] = useState("");
 
   const handleCloseDialog = () => {
     setErrors({});
-    setAlertMessage("");
     handleClose();
   };
 
   const validateFields = () => {
     let newErrors = {};
 
+    if (!formData.purchase_id?.trim())
+      // Validate purchase_id
+      newErrors.purchase_id = "Purchase ID is required";
     if (!formData.vendor_id?.trim())
       newErrors.vendor_id = "Vendor ID is required";
     if (!formData.invoice_no?.trim())
@@ -52,13 +52,7 @@ const PurchaseModel = ({
       newErrors.entered_by = "Entered By is required";
 
     setErrors(newErrors);
-
-    if (Object.keys(newErrors).length > 0) {
-      return false;
-    } else {
-      setAlertMessage("");
-      return true;
-    }
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = () => {
@@ -71,20 +65,17 @@ const PurchaseModel = ({
     <Dialog open={open} onClose={handleCloseDialog} fullWidth maxWidth="sm">
       <DialogTitle
         sx={{
-          textAlign: formData.id ? "center" : "left",
+          textAlign: "center",
           fontFamily: "sans-serif",
           fontWeight: "bold",
-          color: "#fff",
-          backgroundColor: formData.id ? "transparent" : "#1976d2",
-          padding: "12px",
-          pl: 3,
+          color: "#1976d2",
         }}
       >
-        {formData.id ? "Edit Entry" : "Add Purchase"}
+        Add Purchase
       </DialogTitle>
       <DialogContent>
-        {alertMessage && <Alert severity="error">{alertMessage}</Alert>}
         {[
+          { label: "Purchase ID", name: "purchase_id" }, // Add purchase_id field
           { label: "Vendor ID", name: "vendor_id" },
           { label: "Invoice No", name: "invoice_no" },
           { label: "Purchase Date", name: "purchase_date", type: "date" },

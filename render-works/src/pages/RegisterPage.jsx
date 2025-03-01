@@ -391,7 +391,7 @@ const RegisterPage = () => {
       <div className="grid grid-cols-2 w-full">
         {/* First div: Title in the top-left corner */}
         <div className="p-8">
-          <h1 className="text-4xl font-bold text-white">My App</h1>
+          <h1 className="text-4xl font-bold text-white">Hisab</h1>
         </div>
         <div className="flex justify-center items-center p-8">
           <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
