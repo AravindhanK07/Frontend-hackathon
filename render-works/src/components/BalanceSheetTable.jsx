@@ -15,8 +15,10 @@ import {
   Modal,
   TextField,
   MenuItem,
+  IconButton,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 
 const BalanceSheetTable = () => {
@@ -26,11 +28,13 @@ const BalanceSheetTable = () => {
   const [tabValue, setTabValue] = useState(0); // 0 for fixed, 1 for variable
   const [openModal, setOpenModal] = useState(false);
   const [newExpense, setNewExpense] = useState({
-    expenseCategory: "",
+    expense_category: "",
     amount: "",
-    dueDate: "",
+    due_date: "",
     status: "",
-    type: "fixed", // Default type for new expense
+    payment_method: "",
+    entered_by: "Admin",
+    type: "",
   });
 
   // Fetch data from the API
@@ -83,22 +87,28 @@ const BalanceSheetTable = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+
     setNewExpense({
       ...newExpense,
-      [name]: value,
+      [name]: name === "amount" ? Number(value) : value, // Convert amount to a number
     });
   };
 
   const handleAddExpense = async () => {
     try {
       // Simulate API call to add new expense
-      const response = await fetch("https://api.example.com/expenses", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newExpense),
-      });
+      const jwt_code = sessionStorage.getItem("user");
+      const response = await fetch(
+        "http://localhost:8082/api/balance_sheet/add",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jwt_code.token}`, // Add JWT token here
+          },
+          body: JSON.stringify(newExpense),
+        }
+      );
 
       if (response.ok) {
         // Refresh data after successful addition
@@ -113,7 +123,7 @@ const BalanceSheetTable = () => {
         } else {
           setVariableExpenses((prev) => [...prev, newExpenseWithId]);
         }
-
+        fetchData();
         handleCloseModal();
       } else {
         console.error("Failed to add expense");
@@ -206,29 +216,45 @@ const BalanceSheetTable = () => {
         </Table>
       </TableContainer>
 
-      {/* Modal for adding new expense */}
-      <Modal open={openModal} onClose={handleCloseModal}>
+      <Modal
+        open={openModal}
+        onClose={(event, reason) => {
+          if (reason !== "backdropClick") handleCloseModal();
+        }}
+      >
         <Box
           sx={{
             position: "absolute",
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: 400,
+            width: 600,
             bgcolor: "background.paper",
             boxShadow: 24,
             p: 4,
             borderRadius: "8px",
           }}
         >
+          {/* Close Button */}
+          <IconButton
+            onClick={handleCloseModal}
+            sx={{
+              position: "absolute",
+              top: 8,
+              right: 8,
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+
           <Typography variant="h6" gutterBottom>
             Add New Expense
           </Typography>
           <TextField
             fullWidth
             label="Expense Category"
-            name="expenseCategory"
-            value={newExpense.expenseCategory}
+            name="expense_category"
+            value={newExpense.expense_category}
             onChange={handleInputChange}
             sx={{ mb: 2 }}
           />
@@ -244,10 +270,10 @@ const BalanceSheetTable = () => {
           <TextField
             fullWidth
             label="Due Date"
-            name="dueDate"
+            name="due_date"
             type="date"
             InputLabelProps={{ shrink: true }}
-            value={newExpense.dueDate}
+            value={newExpense.due_date}
             onChange={handleInputChange}
             sx={{ mb: 2 }}
           />
@@ -261,6 +287,19 @@ const BalanceSheetTable = () => {
           />
           <TextField
             fullWidth
+            label="Payment method"
+            name="payment_method"
+            select
+            value={newExpense.payment_method}
+            onChange={handleInputChange}
+            sx={{ mb: 2 }}
+          >
+            <MenuItem value="Card">Card</MenuItem>
+            <MenuItem value="Cash">Cash</MenuItem>
+          </TextField>
+
+          <TextField
+            fullWidth
             label="Type"
             name="type"
             select
@@ -271,13 +310,17 @@ const BalanceSheetTable = () => {
             <MenuItem value="fixed">Fixed</MenuItem>
             <MenuItem value="variable">Variable</MenuItem>
           </TextField>
-          <Button
-            variant="contained"
-            onClick={handleAddExpense}
-            sx={{ backgroundColor: "red", color: "white" }}
-          >
-            Add
-          </Button>
+
+          {/* Centered Add Button */}
+          <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+            <Button
+              variant="contained"
+              onClick={handleAddExpense}
+              sx={{ backgroundColor: "red", color: "white" }}
+            >
+              Add
+            </Button>
+          </Box>
         </Box>
       </Modal>
     </Box>

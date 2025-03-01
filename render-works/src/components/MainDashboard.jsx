@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Grid, Paper, Typography } from "@mui/material";
 import axios from "axios";
+import Doughnut2D from "./Doughnut2D";
+import ScrollColumn2D from "./ScrollColumn2D";
 
 export const MainDashboard = () => {
   const [salesKpiData, setSalesKpiData] = useState(null);
+  const [topFiveProductData, setTopFiveProductData] = useState(null);
+  const [expensesVsSales, setExpensesVsSales] = useState([]);
+  const [kpiData3, setKpiData3] = useState(null);
+  const [metricData, setMetricData] = useState(null);
 
   const salesKpi = async () => {
     try {
@@ -19,9 +25,75 @@ export const MainDashboard = () => {
       console.error("Error fetching Sales KPI:", error);
     }
   };
+  const topFiveProduct = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8082/api/topFiveProduct"
+      );
+      console.log("Full Response:", response.data);
+
+      // Destructure and remove status & msg keys
+      const { status, msg, ...filteredData } = response.data;
+
+      // Set the remaining data
+      setTopFiveProductData(filteredData);
+    } catch (error) {
+      console.error("Error fetching Sales KPI:", error);
+    }
+  };
+  const GetExpensesVsSales = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8082/api/GetExpensesVsSales"
+      );
+      console.log("Full Response:", response.data);
+
+      // Destructure and remove status & msg keys
+      const { status, msg, ...filteredData } = response.data;
+
+      // Set the remaining data
+      setExpensesVsSales(filteredData);
+    } catch (error) {
+      console.error("Error fetching Sales KPI:", error);
+    }
+  };
+  const GetKPIData3 = async () => {
+    try {
+      const response = await axios.get("http://localhost:8082/api/GetKPIData3");
+      console.log("Full Response:", response.data);
+
+      // Destructure and remove status & msg keys
+      // const { status, msg, ...filteredData } = response.data;
+
+      // Set the remaining data
+      setKpiData3(response.data.data);
+    } catch (error) {
+      console.error("Error fetching Sales KPI:", error);
+    }
+  };
+  const FetchMetricData = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8082/api/FetchMetricsData"
+      );
+      console.log("Full Response:", response.data);
+
+      // Destructure and remove status & msg keys
+      // const { status, msg, ...filteredData } = response.data;
+
+      // Set the remaining data
+      setMetricData(response.data.data);
+    } catch (error) {
+      console.error("Error fetching Sales KPI:", error);
+    }
+  };
 
   useEffect(() => {
     salesKpi();
+    topFiveProduct();
+    GetExpensesVsSales();
+    GetKPIData3();
+    FetchMetricData();
   }, []);
 
   return (
@@ -35,15 +107,18 @@ export const MainDashboard = () => {
             backgroundColor: "#f5f5f5",
             // height: 100,
             display: "flex",
+            flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
           }}
         >
-          <p class="my-4 text-4xl font-bold text-left text-gray-800 dark:text-white text-center">
+          <p class="my-4 text-3xl font-bold text-left text-gray-800 dark:text-white text-center">
             Total sales
           </p>
 
-          <p class="ml-2 text-gray-700 text-md dark:text-gray-50">30,000</p>
+          <p class="ml-2 text-gray-700 text-lg dark:text-gray-50">
+            {salesKpiData?.ytd_sales}
+          </p>
         </Paper>
       </Grid>
       <Grid item xs={12} sm={4}>
@@ -52,13 +127,20 @@ export const MainDashboard = () => {
             padding: 2,
             textAlign: "center",
             backgroundColor: "#f5f5f5",
-            height: 100,
+            // height: 100,
             display: "flex",
+            flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
           }}
         >
-          <Typography variant="h6">Column 2</Typography>
+          <p class="my-4 text-3xl font-bold text-left text-gray-800 dark:text-white text-center">
+            Total purchase
+          </p>
+
+          <p class="ml-2 text-gray-700 text-lg dark:text-gray-50">
+            {salesKpiData?.ytd_purchase}
+          </p>
         </Paper>
       </Grid>
       <Grid item xs={12} sm={4}>
@@ -67,13 +149,20 @@ export const MainDashboard = () => {
             padding: 2,
             textAlign: "center",
             backgroundColor: "#f5f5f5",
-            height: 100,
+            // height: 100,
             display: "flex",
+            flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
           }}
         >
-          <Typography variant="h6">Column 3</Typography>
+          <p class="my-4 text-3xl font-bold text-left text-gray-800 dark:text-white text-center">
+            Net profit
+          </p>
+
+          <p class="ml-2 text-gray-700 text-lg dark:text-gray-50">
+            {salesKpiData?.net_profit}
+          </p>
         </Paper>
       </Grid>
 
@@ -84,21 +173,32 @@ export const MainDashboard = () => {
             padding: 2,
             textAlign: "center",
             backgroundColor: "#e0e0e0",
-            height: 100,
+            // height: 100,
             display: "flex",
+            flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
           }}
         >
-          <Typography variant="h6">Full-Width Column</Typography>
+          <ScrollColumn2D />
         </Paper>
       </Grid>
 
-      {/* 3rd Row: 3 Columns with Heading and Content */}
-      <Grid item xs={12}>
-        <Typography variant="h5" gutterBottom>
-          Row 3 Heading
-        </Typography>
+      <Grid item xs={12} sm={4}>
+        <div
+          sx={{
+            padding: 2,
+            textAlign: "center",
+            backgroundColor: "#f5f5f5",
+            height: 150,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Doughnut2D />
+        </div>
       </Grid>
       <Grid item xs={12} sm={4}>
         <Paper
@@ -106,13 +206,20 @@ export const MainDashboard = () => {
             padding: 2,
             textAlign: "center",
             backgroundColor: "#f5f5f5",
-            height: 150,
+            // height: 150,
             display: "flex",
+            flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
           }}
         >
-          <Typography variant="body1">Row 3, Column 1 Content</Typography>
+          <p class="my-4 text-3xl font-bold text-left text-gray-800 dark:text-white text-center">
+            Total sales
+          </p>
+
+          <p class="ml-2 text-gray-700 text-lg dark:text-gray-50">
+            {kpiData3?.sku_holding_cost}
+          </p>
         </Paper>
       </Grid>
       <Grid item xs={12} sm={4}>
@@ -121,50 +228,43 @@ export const MainDashboard = () => {
             padding: 2,
             textAlign: "center",
             backgroundColor: "#f5f5f5",
-            height: 150,
+            // height: 150,
             display: "flex",
+            flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
           }}
         >
-          <Typography variant="body1">Row 3, Column 2 Content</Typography>
-        </Paper>
-      </Grid>
-      <Grid item xs={12} sm={4}>
-        <Paper
-          sx={{
-            padding: 2,
-            textAlign: "center",
-            backgroundColor: "#f5f5f5",
-            height: 150,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Typography variant="body1">Row 3, Column 3 Content</Typography>
+          <p class="my-4 text-3xl font-bold text-left text-gray-800 dark:text-white text-center">
+            Total sales
+          </p>
+
+          <p class="ml-2 text-gray-700 text-lg dark:text-gray-50">
+            {kpiData3?.average_transaction_value}
+          </p>
         </Paper>
       </Grid>
 
-      {/* 4th Row: 3 Columns with Heading and Content */}
-      <Grid item xs={12}>
-        <Typography variant="h5" gutterBottom>
-          Row 4 Heading
-        </Typography>
-      </Grid>
       <Grid item xs={12} sm={4}>
         <Paper
           sx={{
             padding: 2,
             textAlign: "center",
             backgroundColor: "#f5f5f5",
-            height: 150,
+            // height: 150,
             display: "flex",
+            flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
           }}
         >
-          <Typography variant="body1">Row 4, Column 1 Content</Typography>
+          <p class="my-4 text-3xl font-bold text-left text-gray-800 dark:text-white text-center">
+            Total sales
+          </p>
+
+          <p class="ml-2 text-gray-700 text-lg dark:text-gray-50">
+            {kpiData3?.footfall_conversion_rate}
+          </p>
         </Paper>
       </Grid>
       <Grid item xs={12} sm={4}>
@@ -173,13 +273,20 @@ export const MainDashboard = () => {
             padding: 2,
             textAlign: "center",
             backgroundColor: "#f5f5f5",
-            height: 150,
+            // height: 150,
             display: "flex",
+            flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
           }}
         >
-          <Typography variant="body1">Row 4, Column 2 Content</Typography>
+          <p class="my-4 text-3xl font-bold text-left text-gray-800 dark:text-white text-center">
+            Total sales
+          </p>
+
+          <p class="ml-2 text-gray-700 text-lg dark:text-gray-50">
+            {metricData?.expense_to_revenue_ratio}
+          </p>
         </Paper>
       </Grid>
       <Grid item xs={12} sm={4}>
@@ -188,35 +295,43 @@ export const MainDashboard = () => {
             padding: 2,
             textAlign: "center",
             backgroundColor: "#f5f5f5",
-            height: 150,
+            // height: 150,
             display: "flex",
+            flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
           }}
         >
-          <Typography variant="body1">Row 4, Column 3 Content</Typography>
+          <p class="my-4 text-3xl font-bold text-left text-gray-800 dark:text-white text-center">
+            Total sales
+          </p>
+
+          <p class="ml-2 text-gray-700 text-lg dark:text-gray-50">
+            {metricData?.revenue_lost_due_to_stock}
+          </p>
         </Paper>
       </Grid>
 
-      {/* 5th Row: 3 Columns with Heading and Content */}
-      <Grid item xs={12}>
-        <Typography variant="h5" gutterBottom>
-          Row 5 Heading
-        </Typography>
-      </Grid>
       <Grid item xs={12} sm={4}>
         <Paper
           sx={{
             padding: 2,
             textAlign: "center",
             backgroundColor: "#f5f5f5",
-            height: 150,
+            // height: 150,
             display: "flex",
+            flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
           }}
         >
-          <Typography variant="body1">Row 5, Column 1 Content</Typography>
+          <p class="my-4 text-3xl font-bold text-left text-gray-800 dark:text-white text-center">
+            Total sales
+          </p>
+
+          <p class="ml-2 text-gray-700 text-lg dark:text-gray-50">
+            {metricData?.profit_margin}
+          </p>
         </Paper>
       </Grid>
       <Grid item xs={12} sm={4}>
@@ -225,13 +340,20 @@ export const MainDashboard = () => {
             padding: 2,
             textAlign: "center",
             backgroundColor: "#f5f5f5",
-            height: 150,
+            // height: 150,
             display: "flex",
+            flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
           }}
         >
-          <Typography variant="body1">Row 5, Column 2 Content</Typography>
+          <p class="my-4 text-3xl font-bold text-left text-gray-800 dark:text-white text-center">
+            Total sales
+          </p>
+
+          <p class="ml-2 text-gray-700 text-lg dark:text-gray-50">
+            {metricData?.top_selling_sku}
+          </p>
         </Paper>
       </Grid>
       <Grid item xs={12} sm={4}>
@@ -240,13 +362,20 @@ export const MainDashboard = () => {
             padding: 2,
             textAlign: "center",
             backgroundColor: "#f5f5f5",
-            height: 150,
+            // height: 150,
             display: "flex",
+            flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
           }}
         >
-          <Typography variant="body1">Row 5, Column 3 Content</Typography>
+          <p class="my-4 text-3xl font-bold text-left text-gray-800 dark:text-white text-center">
+            Total sales
+          </p>
+
+          <p class="ml-2 text-gray-700 text-lg dark:text-gray-50">
+            {metricData?.inventory_cost}
+          </p>
         </Paper>
       </Grid>
     </Grid>
