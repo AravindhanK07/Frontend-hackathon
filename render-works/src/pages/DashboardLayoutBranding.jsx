@@ -39,7 +39,7 @@ const NAVIGATION = [
   },
   {
     segment: "balance-sheet",
-    title: "Balance Sheet",
+    title: "Account Management",
     icon: <BalanceIcon />,
     path: "/balance-sheet",
   },
@@ -119,7 +119,7 @@ function DashboardLayoutBranding(props) {
     <div>
       <Toolbar>
         <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-          My App
+          Hisab
         </Typography>
       </Toolbar>
       <List>
@@ -159,12 +159,12 @@ function DashboardLayoutBranding(props) {
         >
           <Toolbar>
             <Typography
-              variant="h6"
+              variant="h4"
               noWrap
               component="div"
               sx={{ flexGrow: 1 }}
             >
-              My App
+              Hisab
             </Typography>
             <IconButton
               aria-label="account menu"
@@ -206,8 +206,8 @@ function DashboardLayoutBranding(props) {
                 },
               }}
             >
-              <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-              <MenuItem onClick={handleMenuClose}>Settings</MenuItem>
+              <MenuItem onClick={handleMenuClose}>User</MenuItem>
+
               <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
           </Toolbar>

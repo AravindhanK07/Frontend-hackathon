@@ -7,24 +7,26 @@ import FusionTheme from "fusioncharts/themes/fusioncharts.theme.fusion";
 // Load FusionCharts modules
 ReactFC.fcRoot(FusionCharts, Charts, FusionTheme);
 
-const Doughnut2DChart = () => {
+const Doughnut2DChart = ({ topFiveProductData }) => {
+  // Transform API response into chart data format
+  const chartData =
+    topFiveProductData?.top_products?.map((product) => ({
+      label: product.product_name,
+      value: product.total_sales.toString(), // FusionCharts requires values as strings
+    })) || [];
+
   const dataSource = {
     chart: {
-      caption: "Sales by Category",
-      subcaption: "2023",
+      caption: "Top 5 Best-Selling Products",
+      subcaption: "Based on Total Sales",
       showpercentvalues: "1",
-      defaultcenterlabel: "Sales Distribution",
       aligncaptionwithcanvas: "0",
       captionpadding: "0",
       decimals: "1",
       theme: "fusion",
+      showlegend: "0",
     },
-    data: [
-      { label: "Electronics", value: "42000" },
-      { label: "Clothing", value: "81000" },
-      { label: "Groceries", value: "72000" },
-      { label: "Furniture", value: "55000" },
-    ],
+    data: chartData,
   };
 
   return (

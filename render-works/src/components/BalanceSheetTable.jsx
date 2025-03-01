@@ -144,7 +144,7 @@ const BalanceSheetTable = () => {
         }}
       >
         <Typography variant="h4" sx={{ padding: 0, margin: 0 }} gutterBottom>
-          Balance Sheet
+          Account Management
         </Typography>
         <Button
           variant="contained"
@@ -157,9 +157,6 @@ const BalanceSheetTable = () => {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            "&:hover": {
-              backgroundColor: "darkred",
-            },
           }}
           onClick={handleOpenModal}
         >
@@ -167,7 +164,13 @@ const BalanceSheetTable = () => {
         </Button>
       </Box>
 
-      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "flex-end",
+          marginBottom: "15px",
+        }}
+      >
         <Tabs
           value={tabValue}
           onChange={handleTabChange}
